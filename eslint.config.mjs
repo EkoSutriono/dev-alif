@@ -12,9 +12,8 @@ export default withNuxt(
       "prettier/prettier": "warn",
       "vue/multi-word-component-names": "off",
       "@typescript-eslint/no-unused-vars": ["warn"],
-      "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     },
     ignores: ["node_modules/**/*", "dist/**/*"],
   },
-  eslintConfigPrettier,
+  eslintConfigPrettier
 );
