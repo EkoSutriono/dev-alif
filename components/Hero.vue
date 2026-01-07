@@ -1,7 +1,18 @@
 <template>
   <section
-    class="relative flex min-h-[100vh] flex-col items-center justify-center overflow-hidden bg-black px-6 pt-32 pb-40 md:pt-30 md:pb-48"
+    class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black pt-32 pb-40 md:pt-30 md:pb-48"
   >
+    <div class="absolute inset-0 z-0 overflow-hidden">
+      <iframe
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full w-[177.77vh] h-[56.25vw]"
+        :src="youtubeSrc"
+        frameborder="0"
+        allow="autoplay; fullscreen"
+        allowfullscreen
+        style="min-width: 100%; min-height: 100%"
+      ></iframe>
+      <div class="absolute inset-0 bg-black/60 z-10"></div>
+    </div>
     <div class="relative z-10 mx-auto max-w-5xl text-center">
       <div
         class="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white backdrop-blur-sm md:text-sm"
@@ -33,6 +44,17 @@
   </section>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed } from "vue";
+
+const VIDEO_ID = "exahZ12Mj4g";
+
+const youtubeSrc = computed(
+  () =>
+    `https://www.youtube.com/embed/${VIDEO_ID}?` +
+    `autoplay=1&mute=1&controls=0&loop=1&playlist=${VIDEO_ID}` +
+    `&modestbranding=1&showinfo=0&rel=0&playsinline=1`
+);
+</script>
 
 <style scoped></style>
