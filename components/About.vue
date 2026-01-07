@@ -148,17 +148,25 @@ const videoListSrc = ref(videoList);
 const clientListSrc = ref(clientLogo);
 
 const currentIndex = ref(0);
-const windowWidth = ref(window.innerWidth);
+const windowWidth = ref(0);
 
 const firstRow = computed(() => clientListSrc.value.slice(0, 12));
 const secondRow = computed(() => clientListSrc.value.slice(12));
 
 const onResize = () => {
-  windowWidth.value = window.innerWidth;
+  if (import.meta.client) {
+    windowWidth.value = window.innerWidth;
+  }
 };
 
-onMounted(() => window.addEventListener("resize", onResize));
-onUnmounted(() => window.removeEventListener("resize", onResize));
+onMounted(() => {
+  windowWidth.value = window.innerWidth;
+  window.addEventListener("resize", onResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", onResize);
+});
 
 const visible = computed(() => {
   if (windowWidth.value >= 1024) return 4;
