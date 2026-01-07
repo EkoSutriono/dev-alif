@@ -11,7 +11,7 @@
           >
             A
           </div>
-          <span class="text-2xl font-black tracking-tighter text-white">The Amazing Alif</span>
+          <span class="text-2xl font-black tracking-tighter text-white">Alif Ma'luf</span>
         </NuxtLink>
       </div>
 

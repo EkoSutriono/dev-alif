@@ -23,18 +23,20 @@
           ></span>
           <span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
         </span>
-        The Amazing Alif
+        Alif Maluf
       </div>
 
       <h1
         class="mb-8 text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl"
       >
-        Strategi Termudah Belajar Artificial Intelligence
+        Masterclass
+        <br />
+        Produksi Video Iklan Profesional Pakai AI
       </h1>
 
-      <p class="mx-auto max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg md:text-xl">
-        Kuasai teknologi masa depan dengan pendekatan praktis dan terstruktur. Dirancang khusus
-        untuk Anda yang ingin unggul di era digital.
+      <p class="mx-auto max-w-2xl text-base leading-relaxed text-gray-100 sm:text-lg md:text-xl">
+        Kuasai teknik produksi video profesional dengan teknologi AI. Dirancang khusus dengan
+        pendekatan praktis dan terstruktur.
       </p>
     </div>
 

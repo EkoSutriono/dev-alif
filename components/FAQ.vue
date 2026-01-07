@@ -57,17 +57,17 @@ import { reactive } from "vue";
 const listFaq = reactive([
   {
     q: "Apakah kelas ini cocok untuk pemula?",
-    a: "Sangat cocok! Materi kami disusun sedemikian rupa sehingga siapapun, bahkan tanpa latar belakang IT atau desain, dapat mengikutinya dengan mudah.",
+    a: "Sangat cocok! Materi kami disusun dengan urut dari dasar bagaimana cara memahami AI sampai menerapkan AI sesuai kebutuhan produksi. Sehingga siapapun, bahkan tanpa latar belakang videografi atau desain dapat mengikutinya dengan mudah.",
     isOpen: true,
   },
   {
-    q: "Software apa saja yang perlu disiapkan?",
-    a: "Kami akan menggunakan beberapa tools AI berbasis web yang ringan. Tidak diperlukan spesifikasi komputer yang tinggi, cukup browser yang terupdate.",
+    q: "Apa saja yang perlu disiapkan?",
+    a: "Sangat merekomendasikan Freepik sebagai platform All in tools AI berbasis web yang ringan. Tidak diperlukan spesifikasi komputer yang tinggi, cukup browser dan jaringan yang stabil, bahkan Freepik bisa di akses menggunakan Handphone.",
     isOpen: false,
   },
   {
     q: "Apakah ada grup dukungan setelah kelas?",
-    a: "Ya, khusus paket Ultimate akan mendapatkan akses ke Komunitas VIP di Discord untuk diskusi berkelanjutan dan dukungan teknis.",
+    a: "Ya, khusus paket Ultimate akan mendapatkan akses ke Komunitas VIP di Telegram untuk mendapatkan update materi, sharing session via online meet rutin.",
     isOpen: false,
   },
 ]);

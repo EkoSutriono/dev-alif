@@ -30,12 +30,14 @@
           </h2>
           <div class="space-y-4 text-gray-600 text-lg leading-relaxed">
             <p>
-              Seorang visioner di balik The Amazing Alif, dengan dedikasinya bertahun-tahun dalam
-              mengeksplorasi batas kreativitas digital dan kecerdasan buatan.
+              Professional AI-Driven Commercial Video Creator yang berfokus pada pembuatan video
+              iklan dan kampanye visual berbasis AI untuk brand, produk, dan jasa.
             </p>
             <p>
-              Alif telah membantu ratusan kreator untuk mentransformasi cara mereka bercerita
-              melalui media visual yang didukung oleh teknologi AI terbaru.
+              Melalui Masterclass AI ini, aku membagikan workflow nyata, mindset kreatif, dan
+              strategi storytelling yang ia gunakan untuk membantu brand owner, kreator,
+              videografer, dan desainer mengubah AI menjadi alat produksi video iklan yang bernilai
+              jual tinggi.
             </p>
           </div>
         </div>
@@ -45,54 +47,92 @@
         <h3 class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-black">
           Hasil Beberapa Video AI
         </h3>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+
+        <div class="relative overflow-hidden">
           <div
-            v-for="i in 5"
-            :key="i"
-            class="aspect-9/16 rounded-2xl bg-black/5 border border-black/10 flex items-center justify-center group cursor-pointer overflow-hidden transition-all duration-300"
+            class="flex gap-4 transition-transform duration-500"
+            :style="{ transform: `translateX(-${currentIndex * (100 / visible)}%)` }"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-12 w-12 text-black/10 group-hover:text-black/30 transition-colors"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <div
+              v-for="(video, index) in videoListSrc"
+              :key="index"
+              class="aspect-video rounded-2xl overflow-hidden bg-black shrink-0"
+              :style="{ width: `${100 / visible}%` }"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+              <iframe
+                class="w-full h-full"
+                :src="getEmbedUrl(video)"
+                frameborder="0"
+                allow="encrypted-media"
+                allowfullscreen
+              ></iframe>
+            </div>
           </div>
+
+          <button
+            class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black w-12 h-12 rounded-full p-3 shadow-lg transition"
+            @click="prev"
+          >
+            ❮
+          </button>
+
+          <button
+            class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black w-12 h-12 rounded-full p-3 shadow-lg transition"
+            @click="next"
+          >
+            ❯
+          </button>
         </div>
       </div>
 
       <div>
-        <p class="text-center text-gray-400 font-medium mb-8 uppercase tracking-widest text-sm">
+        <p class="text-center text-gray-400 font-medium mb-10 uppercase tracking-widest text-sm">
           Klien yang telah bekerja sama
         </p>
-        <div class="relative overflow-hidden">
-          <div
-            class="flex space-x-12 animate-marquee whitespace-nowrap opacity-30 grayscale hover:grayscale-0 transition-all duration-500 py-4"
-          >
+
+        <div class="space-y-6">
+          <div class="relative overflow-hidden">
             <div
-              v-for="i in 12"
-              :key="i"
-              class="inline-flex h-8 w-32 shrink-0 bg-black/10 rounded-lg"
-            ></div>
+              class="flex space-x-10 animate-marquee whitespace-nowrap opacity-80 grayscale hover:grayscale-0 transition-all duration-500 py-3"
+            >
+              <div
+                v-for="(logo, index) in firstRow"
+                :key="index"
+                class="client-logo w-28 h-14 md:w-32 md:h-16"
+              >
+                <img :src="logo" alt="Client Logo" loading="lazy" />
+              </div>
+
+              <div
+                v-for="(logo, index) in firstRow"
+                :key="'dup1-' + index"
+                class="client-logo w-28 h-14 md:w-32 md:h-16"
+              >
+                <img :src="logo" alt="Client Logo" loading="lazy" />
+              </div>
+            </div>
+          </div>
+
+          <div class="relative overflow-hidden">
             <div
-              v-for="i in 12"
-              :key="'dup-' + i"
-              class="inline-flex h-8 w-32 shrink-0 bg-black/10 rounded-lg"
-            ></div>
+              class="flex space-x-10 animate-marquee-reverse whitespace-nowrap opacity-80 grayscale hover:grayscale-0 transition-all duration-500 py-3"
+            >
+              <div
+                v-for="(logo, index) in secondRow"
+                :key="index"
+                class="client-logo w-28 h-14 md:w-32 md:h-16"
+              >
+                <img :src="logo" alt="Client Logo" loading="lazy" />
+              </div>
+
+              <div
+                v-for="(logo, index) in secondRow"
+                :key="'dup2-' + index"
+                class="client-logo w-28 h-14 md:w-32 md:h-16"
+              >
+                <img :src="logo" alt="Client Logo" loading="lazy" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -100,13 +140,65 @@
   </section>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { videoList, clientLogo } from "~/constant/assets";
+
+const videoListSrc = ref(videoList);
+const clientListSrc = ref(clientLogo);
+
+const currentIndex = ref(0);
+const windowWidth = ref(window.innerWidth);
+
+const firstRow = computed(() => clientListSrc.value.slice(0, 12));
+const secondRow = computed(() => clientListSrc.value.slice(12));
+
+const onResize = () => {
+  windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => window.addEventListener("resize", onResize));
+onUnmounted(() => window.removeEventListener("resize", onResize));
+
+const visible = computed(() => {
+  if (windowWidth.value >= 1024) return 4;
+  if (windowWidth.value >= 768) return 3;
+  return 1;
+});
+
+const maxIndex = computed(() => Math.max(videoListSrc.value.length - visible.value, 0));
+
+const next = () => {
+  currentIndex.value = currentIndex.value >= maxIndex.value ? 0 : currentIndex.value + 1;
+};
+
+const prev = () => {
+  currentIndex.value = currentIndex.value <= 0 ? maxIndex.value : currentIndex.value - 1;
+};
+
+const getEmbedUrl = (url) => {
+  const id = url.includes("youtu.be")
+    ? url.split("youtu.be/")[1].split("?")[0]
+    : url.split("v=")[1].split("&")[0];
+
+  return `https://www.youtube.com/embed/${id}?controls=1&rel=0&playsinline=1`;
+};
+</script>
 
 <style scoped>
+.client-logo {
+  @apply flex items-center justify-center shrink-0;
+}
+
+.client-logo img {
+  @apply max-w-[80%] max-h-[80%] object-contain;
+}
+
 .animate-marquee {
-  animation: marquee 30s linear infinite;
-  display: inline-flex;
-  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+.animate-marquee-reverse {
+  animation: marquee-reverse 20s linear infinite;
 }
 
 @keyframes marquee {
@@ -118,8 +210,17 @@
   }
 }
 
-/* Pause animation on hover if you want */
-.animate-marquee:hover {
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
   animation-play-state: paused;
 }
 </style>

@@ -16,7 +16,7 @@
           </div>
           <div class="p-8 grow">
             <div class="mb-8">
-              <span class="text-4xl font-black text-black">Rp 80k</span>
+              <span class="text-4xl font-black text-black">Rp 86k</span>
               <span class="text-gray-400">/sekali bayar</span>
             </div>
             <ul class="space-y-4">
@@ -51,7 +51,7 @@
         </div>
 
         <div
-          class="w-full md:w-1/2 bg-white rounded-[2.5rem] border-2 border-black overflow-hidden flex flex-col relative group hover:shadow-2xl hover:shadow-black/10 transition-all duration-500"
+          class="ultimate-border w-full md:w-1/2 bg-white rounded-[2.5rem] overflow-hidden flex flex-col relative group hover:shadow-2xl hover:shadow-black/10 transition-all duration-500"
         >
           <div class="absolute top-0 left-0 right-0 h-2 bg-black"></div>
 
@@ -70,7 +70,7 @@
           </div>
           <div class="p-8 grow">
             <div class="mb-8">
-              <span class="text-4xl font-black text-black">Rp 400k</span>
+              <span class="text-4xl font-black text-black">Rp 456k</span>
               <span class="text-gray-400">/sekali bayar</span>
             </div>
             <ul class="space-y-4">
@@ -109,14 +109,56 @@
 </template>
 
 <script setup>
-const premiumFeatures = ["Akses 5 Bab Inti", "Download Asset Dasar", "Update Materi 1 Bulan"];
+const premiumFeatures = ["Akses 5 Bab Inti"];
 
 const ultimateFeatures = [
-  "Akses Komunitas VIP",
-  "Konsultasi Langsung",
-  "Update Materi Seumur Hidup",
-  "Library Exclusive Prompts",
+  "Akses 5 Bab Inti",
+  "Grup komunitas",
+  "Update materi & teknik baru",
+  "Sharing Session rutin",
 ];
 </script>
 
-<style scoped></style>
+<style scoped>
+.ultimate-border {
+  position: relative;
+  border-radius: 2.5rem;
+}
+
+.ultimate-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  border-radius: inherit;
+
+  background: linear-gradient(90deg, black, transparent, black, transparent, black);
+  background-size: 300% 300%;
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.ultimate-border:hover::before {
+  animation: borderMove 5s linear infinite;
+}
+
+@keyframes borderMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
+}
+
+.ultimate-border > * {
+  position: relative;
+  z-index: 1;
+}
+</style>

@@ -13,7 +13,16 @@
               class="sticky top-24 aspect-square rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 font-bold overflow-hidden"
             >
               <div class="absolute inset-0 bg-linear-to-br from-white/5 to-black/5"></div>
-              <span class="relative z-10">Video Preview Materi</span>
+              <span class="relative z-10">
+                <iframe
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full w-[177.77vh] h-[56.25vw]"
+                  :src="youtubeSrc"
+                  frameborder="0"
+                  allow="autoplay; fullscreen"
+                  allowfullscreen
+                  style="min-width: 100%; min-height: 100%"
+                ></iframe>
+              </span>
             </div>
           </div>
 
@@ -40,15 +49,24 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="mt-16 p-8 rounded-2xl bg-white text-black border border-white/10 shadow-2xl"
-              >
+              <div class="border-t-2 border-dashed border-white w-full h-[2px]"></div>
+              <div class="group">
+                <div class="flex items-center gap-6 mb-4">
+                  <div
+                    class="flex-none h-12 w-12 rounded-xl bg-white border border-white/10 flex items-center justify-center text-black font-bold"
+                  >
+                    6
+                  </div>
+                  <h4 class="text-xl font-bold uppercase tracking-wider">BAB 6</h4>
+                </div>
+              </div>
+              <div class="p-8 rounded-2xl bg-white text-black border border-white/10 shadow-2xl">
                 <h5 class="font-black uppercase tracking-widest text-sm mb-2 opacity-60">
-                  Special Update Materi
+                  Special update materi dan teknik terbaru, secara terus menerus.
                 </h5>
-                <p class="font-bold text-lg mb-1">Let's grow your skills together!</p>
+                <p class="font-bold text-lg mb-1">Khusus untuk Paket Ultimate</p>
                 <p class="text-gray-600 text-sm">
-                  Update modul setiap bulan mengikuti perkembangan AI terkini.
+                  Update modul setiap bulan mengikuti perkembangan AI.
                 </p>
               </div>
             </div>
@@ -60,6 +78,17 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+
+const VIDEO_ID = "exahZ12Mj4g";
+
+const youtubeSrc = computed(
+  () =>
+    `https://www.youtube.com/embed/${VIDEO_ID}?` +
+    `autoplay=1&mute=1&controls=0&loop=1&playlist=${VIDEO_ID}` +
+    `&modestbranding=1&showinfo=0&rel=0&playsinline=1`
+);
+
 const chapters = [
   {
     title: "Bab 1",
