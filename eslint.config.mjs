@@ -13,7 +13,7 @@ export default withNuxt(
       "vue/multi-word-component-names": "off",
       "@typescript-eslint/no-unused-vars": ["warn"],
     },
-    ignores: ["node_modules/**/*", "dist/**/*"],
+    ignores: ["node_modules/**/*", ".nuxt/**/*", ".output/**/*", "dist/**/*"],
   },
   eslintConfigPrettier
 );

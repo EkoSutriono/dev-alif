@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, nextTick } from "vue";
+import { ref, onUnmounted, computed, nextTick } from "vue";
 import { useVideoManager } from "~/composables/useVideoManager";
 
 const props = defineProps({

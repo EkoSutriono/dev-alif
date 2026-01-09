@@ -137,7 +137,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { Vue3Marquee } from "vue3-marquee";
-import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+import { Carousel, Slide, Navigation } from "vue3-carousel";
 import { videoList, clientLogo } from "~/constant/assets";
 
 const stopImages = ["https://cdn.qiblat.my.id/stop 1.png", "https://cdn.qiblat.my.id/stop 2.png"];
