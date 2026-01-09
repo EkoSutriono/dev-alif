@@ -1,0 +1,5 @@
+# Cloudflare Pages configuration
+name = "alif-landing-page"
+
+[build]
+command = "bun run build"
