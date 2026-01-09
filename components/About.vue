@@ -5,22 +5,18 @@
   >
     <div class="container mx-auto px-4 relative z-10">
       <div class="flex flex-col md:flex-row items-center gap-12 mb-32">
-        <div class="w-full md:w-1/2 h-[400px] bg-gray-300 rounded-2xl flex justify-center">
-          <div class="relative group">
-            <div
-              class="absolute -inset-1 bg-black/5 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"
-            ></div>
-            <div
-              class="relative w-full max-w-sm aspect-3/4 rounded-3xl bg-black/5 overflow-hidden border border-black/10"
-            >
-              <div
-                class="absolute inset-0 flex items-center justify-center text-gray-400 font-bold"
-              >
-                Foto Alif
-              </div>
-            </div>
-          </div>
+        <div
+          class="w-full md:w-1/2 h-[400px] rounded-2xl relative overflow-hidden flex justify-center items-center"
+        >
+          <img
+            v-for="(img, index) in stopImages"
+            :key="index"
+            :src="img"
+            class="absolute w-auto h-[90%] object-contain transition-none rounded-2xl"
+            :class="index === activeFrame ? 'opacity-100' : 'opacity-0'"
+          />
         </div>
+
         <div class="w-full md:w-1/2">
           <h2 class="text-4xl font-black mb-6 tracking-tight">
             Bio Singkat
@@ -31,13 +27,12 @@
           <div class="space-y-4 text-gray-600 text-lg leading-relaxed">
             <p>
               Professional AI-Driven Commercial Video Creator yang berfokus pada pembuatan video
-              iklan dan kampanye visual berbasis AI untuk brand, produk, dan jasa.
+              iklan dan campaign visual berbasis AI untuk brand, produk, dan jasa.
             </p>
             <p>
-              Melalui Masterclass AI ini, aku membagikan workflow nyata, mindset kreatif, dan
-              strategi storytelling yang ia gunakan untuk membantu brand owner, kreator,
-              videografer, dan desainer mengubah AI menjadi alat produksi video iklan yang bernilai
-              jual tinggi.
+              Melalui Masterclass ini, aku membagikan workflow nyata, mindset kreatif, dan strategi
+              storytelling yang aku gunakan untuk membantu brand owner, kreator, videografer, dan
+              desainer mengubah AI menjadi alat produksi video iklan yang bernilai jual tinggi.
             </p>
           </div>
         </div>
@@ -93,7 +88,7 @@
         <div class="space-y-6">
           <div class="relative overflow-hidden">
             <div
-              class="flex space-x-10 animate-marquee whitespace-nowrap opacity-80 grayscale hover:grayscale-0 transition-all duration-500 py-3"
+              class="flex space-x-10 animate-marquee whitespace-nowrap opacity-80 transition-all duration-500 py-3"
             >
               <div
                 v-for="(logo, index) in firstRow"
@@ -115,7 +110,7 @@
 
           <div class="relative overflow-hidden">
             <div
-              class="flex space-x-10 animate-marquee-reverse whitespace-nowrap opacity-80 grayscale hover:grayscale-0 transition-all duration-500 py-3"
+              class="flex space-x-10 animate-marquee-reverse whitespace-nowrap opacity-80 transition-all duration-500 py-3"
             >
               <div
                 v-for="(logo, index) in secondRow"
@@ -144,6 +139,11 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { videoList, clientLogo } from "~/constant/assets";
 
+const stopImages = ["https://cdn.qiblat.my.id/stop 1.png", "https://cdn.qiblat.my.id/stop 2.png"];
+
+const activeFrame = ref(0);
+let stopInterval = null;
+
 const videoListSrc = ref(videoList);
 const clientListSrc = ref(clientLogo);
 
@@ -162,10 +162,15 @@ const onResize = () => {
 onMounted(() => {
   windowWidth.value = window.innerWidth;
   window.addEventListener("resize", onResize);
+
+  stopInterval = setInterval(() => {
+    activeFrame.value = activeFrame.value >= stopImages.length - 1 ? 0 : activeFrame.value + 1;
+  }, 400);
 });
 
 onUnmounted(() => {
   window.removeEventListener("resize", onResize);
+  clearInterval(stopInterval);
 });
 
 const visible = computed(() => {

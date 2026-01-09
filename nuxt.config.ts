@@ -8,7 +8,13 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "en",
       },
-      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: "https://cdn.qiblat.my.id/Logo-only-Alif-Maluf.png",
+        },
+      ],
     },
   },
 

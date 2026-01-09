@@ -23,21 +23,27 @@
           ></span>
           <span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
         </span>
-        Alif Maluf
+        Gabung Sekarang!
       </div>
 
       <h1
-        class="mb-8 text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl"
+        class="mb-8 font-black leading-[1.1] tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl"
       >
         Masterclass
-        <br />
-        Produksi Video Iklan Profesional Pakai AI
       </h1>
+
+      <span class="text-white font-black mb-4 flex items-center gap-4 text-5xl">
+        Produksi Video Iklan Profesional Pakai AI
+      </span>
 
       <p class="mx-auto max-w-2xl text-base leading-relaxed text-gray-100 sm:text-lg md:text-xl">
         Kuasai teknik produksi video profesional dengan teknologi AI. Dirancang khusus dengan
         pendekatan praktis dan terstruktur.
       </p>
+      <div class="flex items-center justify-center mt-20 gap-4">
+        <span>Telah dipelajari oleh 1000+ orang</span>
+        <Avatar />
+      </div>
     </div>
 
     <div
@@ -48,6 +54,7 @@
 
 <script setup>
 import { computed } from "vue";
+import Avatar from "./ui/avatar.vue";
 
 const VIDEO_ID = "exahZ12Mj4g";
 

@@ -91,24 +91,33 @@ const youtubeSrc = computed(
 
 const chapters = [
   {
-    title: "Bab 1",
-    lessons: ["Materi 1", "Materi 2", "Materi 3", "Materi 4"],
+    title: "Bab 1: Memahami AI",
+    lessons: ["Modul 1", "Modul 2", "Modul 3", "Modul 4", "Modul 5"],
   },
   {
-    title: "Bab 2",
-    lessons: ["Materi 1", "Materi 2", "Materi 3", "Materi 4"],
+    title: "Bab 2: Brand Understanding & Creative Concept",
+    lessons: ["Modul 1", "Modul 2", "Modul 3", "Modul 4", "Modul 5", "Modul 6"],
   },
   {
-    title: "Bab 3",
-    lessons: ["Materi 1", "Materi 2", "Materi 3", "Materi 4", "Materi 5", "Materi 6"],
+    title: "Bab 3: Practice Prompting to Generating - Image & Video",
+    lessons: [
+      "Modul 1",
+      "Modul 2",
+      "Modul 3",
+      "Modul 4",
+      "Modul 5",
+      "Modul 6",
+      "Modul 7",
+      "Modul 8",
+    ],
   },
   {
-    title: "Bab 4",
-    lessons: ["Materi 1", "Materi 2", "Materi 3", "Materi 4", "Materi 5", "Materi 6"],
+    title: "Bab 4: Practice Prompting to Generating - Product",
+    lessons: ["Modul 1", "Modul 2", "Modul 3", "Modul 4", "Modul 5", "Modul 6"],
   },
   {
-    title: "Bab 5",
-    lessons: ["Materi 1", "Materi 2", "Materi 3", "Materi 4", "Materi 5", "Materi 6"],
+    title: "Bab 5: Practice Prompting to Generating - Audio",
+    lessons: ["Modul 1", "Modul 2", "Modul 3"],
   },
 ];
 </script>

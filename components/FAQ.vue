@@ -57,7 +57,7 @@ import { reactive } from "vue";
 const listFaq = reactive([
   {
     q: "Apakah kelas ini cocok untuk pemula?",
-    a: "Sangat cocok! Materi kami disusun dengan urut dari dasar bagaimana cara memahami AI sampai menerapkan AI sesuai kebutuhan produksi. Sehingga siapapun, bahkan tanpa latar belakang videografi atau desain dapat mengikutinya dengan mudah.",
+    a: "Sangat cocok! Materi ini disusun dengan urut dari dasar bagaimana cara memahami AI sampai menerapkan AI sesuai kebutuhan produksi. Sehingga siapapun, bahkan tanpa latar belakang videografi atau desain dapat mengikutinya dengan mudah.",
     isOpen: true,
   },
   {
@@ -67,7 +67,7 @@ const listFaq = reactive([
   },
   {
     q: "Apakah ada grup dukungan setelah kelas?",
-    a: "Ya, khusus paket Ultimate akan mendapatkan akses ke Komunitas VIP di Telegram untuk mendapatkan update materi, sharing session via online meet rutin.",
+    a: "Ya, khusus paket Ultimate akan mendapatkan akses ke Grup Komunitas VIP untuk mendapatkan update materi, update teknik, sharing session rutin & bedah project.",
     isOpen: false,
   },
 ]);

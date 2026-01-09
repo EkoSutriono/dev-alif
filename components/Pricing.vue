@@ -11,7 +11,9 @@
           <div class="p-8 border-b border-black/5">
             <h3 class="text-2xl font-black text-black mb-2 uppercase">Premium</h3>
             <p class="text-gray-500 text-sm">
-              Ideal untuk pemula yang ingin mulai bereksplorasi dengan AI.
+              Cocok untuk kamu yang ingin mulai masuk ke dunia AI untuk produksi video iklan tanpa
+              ribet. Pelajari fondasi penting, alur kerja, dan mindset yang tepat agar kamu paham
+              bagaimana AI digunakan secara profesional.
             </p>
           </div>
           <div class="p-8 grow">
@@ -65,7 +67,9 @@
               </span>
             </div>
             <p class="text-gray-500 text-sm">
-              Paket komplit untuk Anda yang ingin menjadi profesional sejati.
+              Paket paling lengkap untuk kamu yang ingin naik level jadi profesional AI-driven
+              video. Bukan cuma materi, tapi juga ekosistem belajar: komunitas, update teknik
+              terbaru, dan sharing rutin agar skill kamu terus relevan dan berkembang.
             </p>
           </div>
           <div class="p-8 grow">
@@ -109,13 +113,16 @@
 </template>
 
 <script setup>
-const premiumFeatures = ["Akses 5 Bab Inti"];
+const premiumFeatures = ["Materi 5 Bab inti", "20+ modul pembelajaran", "Akses selamanya"];
 
 const ultimateFeatures = [
-  "Akses 5 Bab Inti",
+  "Materi 5 Bab inti",
+  "20+ modul pembelajaran",
+  "Akses selamanya",
   "Grup komunitas",
   "Update materi & teknik baru",
-  "Sharing Session rutin",
+  "Sharing session rutin",
+  "Bedah project Alif Ma`luf",
 ];
 </script>
 

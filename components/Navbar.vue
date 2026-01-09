@@ -7,9 +7,9 @@
       <div class="flex items-center">
         <NuxtLink to="/" class="group relative flex items-center gap-2">
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-white font-bold text-black transition-transform duration-300 group-hover:scale-110"
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-black font-bold text-white transition-transform duration-300 group-hover:scale-110"
           >
-            A
+            <img src="https://cdn.qiblat.my.id/Logo-only-Alif-Maluf.png" alt="" />
           </div>
           <span class="text-2xl font-black tracking-tighter text-white">Alif Ma'luf</span>
         </NuxtLink>
