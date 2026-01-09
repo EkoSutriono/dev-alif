@@ -1,0 +1,229 @@
+<template>
+  <div
+    class="relative overflow-hidden bg-black group/player"
+    :class="[isBackground ? 'absolute inset-0 pointer-events-none' : 'w-full h-full']"
+  >
+    <!-- 1. Autoplay Background Videos (Direct Iframe) -->
+    <iframe
+      v-if="useDirectIframe && videoId"
+      class="w-full h-full"
+      :class="{ 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2': aspectCover }"
+      :style="
+        aspectCover
+          ? { minWidth: '100%', minHeight: '100%', width: '177.77vh', height: '56.25vw' }
+          : {}
+      "
+      :src="directEmbedUrl"
+      frameborder="0"
+      allow="autoplay; encrypted-media; fullscreen"
+      allowfullscreen
+    ></iframe>
+
+    <!-- 2. Non-Autoplay Videos (Thumbnail Facade) -->
+    <template v-else>
+      <div v-if="isActive" class="w-full h-full">
+        <div v-if="type === 'youtube'" :id="playerId" class="w-full h-full"></div>
+        <iframe
+          v-else-if="type === 'instagram'"
+          class="w-full h-full"
+          :src="embedUrl"
+          frameborder="0"
+          allow="autoplay; encrypted-media; fullscreen"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <div v-else-if="type" class="w-full h-full cursor-pointer relative" @click="handleStartVideo">
+        <img
+          v-if="thumbnailUrl"
+          :src="thumbnailUrl"
+          class="w-full h-full object-cover brightness-75 group-hover/player:brightness-90 transition-all duration-500 scale-105 group-hover/player:scale-100"
+          alt="Video Preview"
+          @error="(e) => (e.target.src = hqThumbnailUrl)"
+        />
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover/player:scale-110 group-hover/player:bg-white/30 transition-all duration-300"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              class="w-8 h-8 md:w-10 md:h-10 text-white fill-current translate-x-0.5"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="absolute bottom-6 left-6 right-6 opacity-0 group-hover/player:opacity-100 transition-opacity duration-300"
+        >
+          <div class="h-1 w-full bg-white/20 rounded-full overflow-hidden">
+            <div class="h-full w-0 bg-white"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <div v-if="!type" class="flex items-center justify-center w-full h-full text-white text-xs">
+      URL Video Tidak Valid
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, computed, nextTick } from "vue";
+import { useVideoManager } from "~/composables/useVideoManager";
+
+const props = defineProps({
+  url: {
+    type: String,
+    required: true,
+  },
+  autoplay: {
+    type: Boolean,
+    default: false,
+  },
+  mute: {
+    type: Boolean,
+    default: false,
+  },
+  isBackground: {
+    type: Boolean,
+    default: false,
+  },
+  aspectCover: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const { registerPlayer, unregisterPlayer, onPlay } = useVideoManager();
+const playerId = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
+const player = ref(null);
+const isActive = ref(false);
+
+const type = computed(() => {
+  if (!props.url) return null;
+  if (props.url.includes("youtube.com") || props.url.includes("youtu.be")) return "youtube";
+  if (props.url.includes("instagram.com")) return "instagram";
+  return null;
+});
+
+const videoId = computed(() => {
+  if (!props.url) return null;
+  if (type.value === "youtube") {
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = props.url.match(regExp);
+    return match && match[7].length === 11 ? match[7] : null;
+  }
+  if (type.value === "instagram") {
+    const match = props.url.match(/instagram.com\/(p|reel|reels)\/([^/?#&]+)/);
+    return match ? match[2] : null;
+  }
+  return null;
+});
+
+const thumbnailUrl = computed(() => {
+  if (type.value === "youtube" && videoId.value) {
+    return `https://img.youtube.com/vi/${videoId.value}/maxresdefault.jpg`;
+  }
+  return null;
+});
+
+const hqThumbnailUrl = computed(() => {
+  if (type.value === "youtube" && videoId.value) {
+    return `https://img.youtube.com/vi/${videoId.value}/hqdefault.jpg`;
+  }
+  return null;
+});
+
+const useDirectIframe = computed(() => {
+  return props.autoplay && type.value === "youtube";
+});
+
+const directEmbedUrl = computed(() => {
+  if (type.value === "youtube" && videoId.value) {
+    return `https://www.youtube.com/embed/${videoId.value}?rel=0&autoplay=1&mute=${props.mute ? 1 : 0}&controls=0&loop=1&playlist=${videoId.value}&modestbranding=1&playsinline=1&iv_load_policy=3&enablejsapi=1`;
+  }
+  return "";
+});
+
+const embedUrl = computed(() => {
+  if (type.value === "youtube" && videoId.value) {
+    return `https://www.youtube.com/embed/${videoId.value}?rel=0&autoplay=1&enablejsapi=1&modestbranding=1&iv_load_policy=3&controls=1&showinfo=0`;
+  }
+  if (type.value === "instagram" && videoId.value) {
+    return `https://www.instagram.com/p/${videoId.value}/embed/captioned=0`;
+  }
+  return props.url;
+});
+
+const handleStartVideo = () => {
+  isActive.value = true;
+  if (type.value === "youtube") {
+    nextTick(() => {
+      initYoutube();
+    });
+  }
+};
+
+const initYoutube = () => {
+  if (window.YT && window.YT.Player) {
+    createPlayer();
+    return;
+  }
+
+  if (!window.loadingYTAPI) {
+    window.loadingYTAPI = true;
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  }
+
+  // Polling check for YT API readiness if not using the official callback to avoid conflicts
+  const checkYT = setInterval(() => {
+    if (window.YT && window.YT.Player) {
+      clearInterval(checkYT);
+      window.loadingYTAPI = false;
+      createPlayer();
+    }
+  }, 100);
+};
+
+const createPlayer = () => {
+  if (!videoId.value || !isActive.value) return;
+
+  player.value = new window.YT.Player(playerId, {
+    videoId: videoId.value,
+    playerVars: {
+      autoplay: 1,
+      mute: props.mute ? 1 : 0,
+      controls: 1,
+      modestbranding: 1,
+      rel: 0,
+      showinfo: 0,
+      iv_load_policy: 3,
+      playsinline: 1,
+    },
+    events: {
+      onReady: (event) => {
+        registerPlayer(playerId, event.target);
+      },
+      onStateChange: (event) => {
+        if (event.data === window.YT.PlayerState.PLAYING) {
+          onPlay(playerId);
+        }
+      },
+    },
+  });
+};
+
+onUnmounted(() => {
+  if (player.value) {
+    if (typeof player.value.destroy === "function") {
+      player.value.destroy();
+    }
+    unregisterPlayer(playerId);
+  }
+});
+</script>

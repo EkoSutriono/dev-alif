@@ -1,8 +1,8 @@
 <template>
-  <section id="faq" class="relative bg-black py-24 pb-48 text-white">
+  <section id="faq" class="relative bg-black md:py-24 py-16 text-white">
     <div class="container mx-auto px-4 max-w-3xl">
       <h2
-        class="text-3xl md:text-5xl font-black text-center mb-16 underline decoration-white decoration-4 underline-offset-8 uppercase"
+        class="text-3xl md:text-5xl font-black text-center md:mb-16 mb-8 decoration-white decoration-4 uppercase"
       >
         FaQ
       </h2>

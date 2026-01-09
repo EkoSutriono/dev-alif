@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Alif Ma'luf",
+      title: "Masterclass AI - Alif Ma'luf",
       htmlAttrs: {
         lang: "en",
       },

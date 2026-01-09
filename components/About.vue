@@ -1,12 +1,14 @@
 <template>
   <section
     id="about"
-    class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-white py-24 text-black"
+    v-animate
+    class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-linear-to-b from-black via-black/20 to-white md:py-24 py-4 text-white fade-up-reveal"
   >
-    <div class="container mx-auto px-4 relative z-10">
-      <div class="flex flex-col md:flex-row items-center gap-12 mb-32">
+    <div v-animate.stagger class="container mx-auto px-4 relative z-10">
+      <!-- Bio Section -->
+      <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 mb-32">
         <div
-          class="w-full md:w-1/2 h-[400px] rounded-2xl relative overflow-hidden flex justify-center items-center"
+          class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center animate-item"
         >
           <img
             v-for="(img, index) in stopImages"
@@ -17,14 +19,12 @@
           />
         </div>
 
-        <div class="w-full md:w-1/2">
-          <h2 class="text-4xl font-black mb-6 tracking-tight">
+        <div class="w-full md:w-1/2 animate-item">
+          <h2 class="text-4xl font-black mb-6 tracking-tight text-white">
             Bio Singkat
-            <span class="text-black decoration-black underline decoration-4 underline-offset-8">
-              Alif Ma'luf
-            </span>
+            <span class="text-white decoration-white decoration-4">Alif Ma'luf</span>
           </h2>
-          <div class="space-y-4 text-gray-600 text-lg leading-relaxed">
+          <div class="space-y-4 text-gray-300 text-lg leading-relaxed">
             <p>
               Professional AI-Driven Commercial Video Creator yang berfokus pada pembuatan video
               iklan dan campaign visual berbasis AI untuk brand, produk, dan jasa.
@@ -38,98 +38,97 @@
         </div>
       </div>
 
-      <div class="mb-32">
-        <h3 class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-black">
-          Hasil Beberapa Video AI
-        </h3>
+      <h3
+        v-animate
+        class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-white fade-up-reveal"
+      >
+        Hasil Beberapa Video AI
+      </h3>
 
-        <div class="relative overflow-hidden">
-          <div
-            class="flex gap-4 transition-transform duration-500"
-            :style="{ transform: `translateX(-${currentIndex * (100 / visible)}%)` }"
+      <div class="relative group/slider min-h-[300px] px-2 md:px-16 w-full overflow-hidden">
+        <client-only>
+          <Carousel
+            :autoplay="4000"
+            :wrap-around="true"
+            :pause-autoplay-on-hover="true"
+            :items-to-show="'auto'"
+            :snap-align="'center'"
+            class="results-carousel w-full"
           >
-            <div
-              v-for="(video, index) in videoListSrc"
-              :key="index"
-              class="aspect-video rounded-2xl overflow-hidden bg-black shrink-0"
-              :style="{ width: `${100 / visible}%` }"
-            >
-              <iframe
-                class="w-full h-full"
-                :src="getEmbedUrl(video)"
-                frameborder="0"
-                allow="encrypted-media"
-                allowfullscreen
-              ></iframe>
+            <Slide v-for="(video, index) in videoListSrc" :key="index">
+              <div
+                class="carousel__item px-2"
+                @mouseenter="stopAutoScrollManually"
+                @mouseleave="startAutoScrollManually"
+              >
+                <div
+                  class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 group relative h-[400px] md:h-[500px] aspect-9/16"
+                  :class="video.type === 'portrait' ? 'aspect-9/16' : 'aspect-video'"
+                >
+                  <video
+                    v-if="video.url.startsWith('/video/') || video.url.endsWith('.mp4')"
+                    :ref="(el) => (videoRefs[index] = el)"
+                    class="w-full h-full object-cover"
+                    controls
+                    muted
+                    loop
+                    playsinline
+                    @play="handleVideoPlay(index)"
+                  >
+                    <source :src="video.url" type="video/mp4" />
+                  </video>
+                  <iframe
+                    v-else
+                    class="w-full h-full"
+                    :src="getEmbedUrl(video.url, false)"
+                    frameborder="0"
+                    allow="encrypted-media; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+          <template #placeholder>
+            <div class="flex gap-4 overflow-hidden px-2 md:px-16 w-full">
+              <div
+                v-for="i in 3"
+                :key="i"
+                class="shrink-0 aspect-9/16 h-[400px] md:h-[500px] bg-zinc-900 rounded-2xl animate-pulse"
+              ></div>
             </div>
-          </div>
-
-          <button
-            class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black w-12 h-12 rounded-full p-3 shadow-lg transition"
-            @click="prev"
-          >
-            ❮
-          </button>
-
-          <button
-            class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-black w-12 h-12 rounded-full p-3 shadow-lg transition"
-            @click="next"
-          >
-            ❯
-          </button>
-        </div>
+          </template>
+        </client-only>
       </div>
+    </div>
 
-      <div>
-        <p class="text-center text-gray-400 font-medium mb-10 uppercase tracking-widest text-sm">
-          Klien yang telah bekerja sama
-        </p>
+    <div v-animate class="md:mt-24 mt-16 bg-white rounded-[60px] shadow-xl p-8 container mx-auto">
+      <p class="text-center text-black font-medium mb-10 uppercase tracking-widest text-sm">
+        Klien yang telah bekerja sama
+      </p>
 
-        <div class="space-y-6">
-          <div class="relative overflow-hidden">
-            <div
-              class="flex space-x-10 animate-marquee whitespace-nowrap opacity-80 transition-all duration-500 py-3"
-            >
-              <div
-                v-for="(logo, index) in firstRow"
-                :key="index"
-                class="client-logo w-28 h-14 md:w-32 md:h-16"
-              >
-                <img :src="logo" alt="Client Logo" loading="lazy" />
-              </div>
-
-              <div
-                v-for="(logo, index) in firstRow"
-                :key="'dup1-' + index"
-                class="client-logo w-28 h-14 md:w-32 md:h-16"
-              >
-                <img :src="logo" alt="Client Logo" loading="lazy" />
-              </div>
+      <div class="space-y-4">
+        <client-only>
+          <Vue3Marquee :duration="windowWidth < 768 ? 15 : 40" :pause-on-hover="true">
+            <div v-for="(logo, index) in firstRow" :key="index" class="client-logo px-5">
+              <img :src="logo" alt="Client Logo" class="w-28 h-14 md:w-32 md:h-16 object-contain" />
             </div>
-          </div>
+          </Vue3Marquee>
 
-          <div class="relative overflow-hidden">
-            <div
-              class="flex space-x-10 animate-marquee-reverse whitespace-nowrap opacity-80 transition-all duration-500 py-3"
-            >
-              <div
-                v-for="(logo, index) in secondRow"
-                :key="index"
-                class="client-logo w-28 h-14 md:w-32 md:h-16"
-              >
-                <img :src="logo" alt="Client Logo" loading="lazy" />
-              </div>
-
-              <div
-                v-for="(logo, index) in secondRow"
-                :key="'dup2-' + index"
-                class="client-logo w-28 h-14 md:w-32 md:h-16"
-              >
-                <img :src="logo" alt="Client Logo" loading="lazy" />
-              </div>
+          <Vue3Marquee
+            :duration="windowWidth < 768 ? 15 : 40"
+            :direction="'reverse'"
+            :pause-on-hover="true"
+          >
+            <div v-for="(logo, index) in secondRow" :key="index" class="client-logo px-5">
+              <img :src="logo" alt="Client Logo" class="w-28 h-14 md:w-32 md:h-16 object-contain" />
             </div>
-          </div>
-        </div>
+          </Vue3Marquee>
+        </client-only>
       </div>
     </div>
   </section>
@@ -137,21 +136,58 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import { Vue3Marquee } from "vue3-marquee";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { videoList, clientLogo } from "~/constant/assets";
 
 const stopImages = ["https://cdn.qiblat.my.id/stop 1.png", "https://cdn.qiblat.my.id/stop 2.png"];
 
 const activeFrame = ref(0);
+const activeVideoIndex = ref(-1);
+const videoRefs = ref([]);
 let stopInterval = null;
 
 const videoListSrc = ref(videoList);
 const clientListSrc = ref(clientLogo);
 
-const currentIndex = ref(0);
 const windowWidth = ref(0);
 
 const firstRow = computed(() => clientListSrc.value.slice(0, 12));
 const secondRow = computed(() => clientListSrc.value.slice(12));
+
+const getEmbedUrl = (url, autoplay = false) => {
+  if (!url) return "";
+  let id = "";
+  if (url.includes("youtube.com/shorts/")) {
+    id = url.split("shorts/")[1].split(/[?#]/)[0];
+  } else if (url.includes("youtu.be/")) {
+    id = url.split("youtu.be/")[1].split(/[?#]/)[0];
+  } else if (url.includes("youtube.com/watch")) {
+    const match = url.match(/[?&]v=([^&#]+)/);
+    id = match ? match[1] : "";
+  } else if (url.includes("instagram.com")) {
+    const match = url.match(/instagram.com\/(p|reel|reels)\/([^/?#&]+)/);
+    return match ? `https://www.instagram.com/${match[1]}/${match[2]}/embed/captioned=0` : url;
+  }
+
+  if (id) {
+    return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1&controls=1${autoplay ? "&autoplay=1" : ""}`;
+  }
+  return url;
+};
+
+const handleVideoPlay = (index) => {
+  activeVideoIndex.value = index;
+  stopOtherVideos(index);
+};
+
+const stopOtherVideos = (currentIndex) => {
+  videoRefs.value.forEach((video, idx) => {
+    if (idx !== currentIndex && video) {
+      video.pause();
+    }
+  });
+};
 
 const onResize = () => {
   if (import.meta.client) {
@@ -173,67 +209,77 @@ onUnmounted(() => {
   clearInterval(stopInterval);
 });
 
-const visible = computed(() => {
-  if (windowWidth.value >= 1024) return 4;
-  if (windowWidth.value >= 768) return 3;
-  return 1;
-});
-
-const maxIndex = computed(() => Math.max(videoListSrc.value.length - visible.value, 0));
-
-const next = () => {
-  currentIndex.value = currentIndex.value >= maxIndex.value ? 0 : currentIndex.value + 1;
-};
-
-const prev = () => {
-  currentIndex.value = currentIndex.value <= 0 ? maxIndex.value : currentIndex.value - 1;
-};
-
-const getEmbedUrl = (url) => {
-  const id = url.includes("youtu.be")
-    ? url.split("youtu.be/")[1].split("?")[0]
-    : url.split("v=")[1].split("&")[0];
-
-  return `https://www.youtube.com/embed/${id}?controls=1&rel=0&playsinline=1`;
-};
+const stopAutoScrollManually = () => {};
+const startAutoScrollManually = () => {};
 </script>
 
 <style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 .client-logo {
-  @apply flex items-center justify-center shrink-0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.client-logo img {
-  @apply max-w-[80%] max-h-[80%] object-contain;
+:deep(.carousel__prev),
+:deep(.carousel__next) {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 9999px;
+  width: 32px;
+  height: 32px;
+  transition: all 0.3s;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.animate-marquee {
-  animation: marquee 20s linear infinite;
-}
-.animate-marquee-reverse {
-  animation: marquee-reverse 20s linear infinite;
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes marquee-reverse {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0);
+@media (min-width: 350px) {
+  :deep(.carousel__prev),
+  :deep(.carousel__next) {
+    width: 40px;
+    height: 40px;
   }
 }
 
-.animate-marquee:hover,
-.animate-marquee-reverse:hover {
-  animation-play-state: paused;
+@media (min-width: 768px) {
+  :deep(.carousel__prev),
+  :deep(.carousel__next) {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+:deep(.carousel__prev:hover),
+:deep(.carousel__next:hover) {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+:deep(.carousel__prev) {
+  left: 10px;
+}
+:deep(.carousel__next) {
+  right: 10px;
+}
+
+:deep(.carousel__slide) {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  width: auto !important;
+}
+
+:deep(.carousel__track) {
+  align-items: stretch;
 }
 </style>
