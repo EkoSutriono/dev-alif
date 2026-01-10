@@ -4,15 +4,17 @@
     class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black pt-32 pb-40 md:pt-30 md:pb-48 fade-in-reveal"
   >
     <div class="absolute inset-0 z-0 overflow-hidden">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full object-cover"
-      >
-        <source src="/video/intro-lp-hero.mp4" type="video/mp4" />
-      </video>
+      <client-only>
+        <video
+          autoplay
+          muted
+          loop
+          playsinline
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full object-cover"
+        >
+          <source :src="heroVideo" type="video/mp4" />
+        </video>
+      </client-only>
       <div class="absolute inset-0 bg-black/60 z-10"></div>
     </div>
     <div class="relative z-10 mx-auto max-w-5xl text-center">
@@ -66,6 +68,8 @@
 
 <script setup>
 import Avatar from "./ui/avatar.vue";
+
+const heroVideo = "https://cdn.qiblat.my.id/intro-lp-hero.mp4";
 </script>
 
 <style scoped></style>

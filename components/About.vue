@@ -65,26 +65,7 @@
                   class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 group relative h-[400px] md:h-[500px] aspect-9/16"
                   :class="video.type === 'portrait' ? 'aspect-9/16' : 'aspect-video'"
                 >
-                  <video
-                    v-if="video.url.startsWith('/video/') || video.url.endsWith('.mp4')"
-                    :ref="(el) => (videoRefs[index] = el)"
-                    class="w-full h-full object-cover"
-                    controls
-                    muted
-                    loop
-                    playsinline
-                    @play="handleVideoPlay(index)"
-                  >
-                    <source :src="video.url" type="video/mp4" />
-                  </video>
-                  <iframe
-                    v-else
-                    class="w-full h-full"
-                    :src="getEmbedUrl(video.url, false)"
-                    frameborder="0"
-                    allow="encrypted-media; fullscreen"
-                    allowfullscreen
-                  ></iframe>
+                  <VideoPlayer :url="video.url" />
                 </div>
               </div>
             </Slide>
@@ -143,8 +124,6 @@ import { videoList, clientLogo } from "~/constant/assets";
 const stopImages = ["https://cdn.qiblat.my.id/stop 1.png", "https://cdn.qiblat.my.id/stop 2.png"];
 
 const activeFrame = ref(0);
-const activeVideoIndex = ref(-1);
-const videoRefs = ref([]);
 let stopInterval = null;
 
 const videoListSrc = ref(videoList);
@@ -154,40 +133,6 @@ const windowWidth = ref(0);
 
 const firstRow = computed(() => clientListSrc.value.slice(0, 12));
 const secondRow = computed(() => clientListSrc.value.slice(12));
-
-const getEmbedUrl = (url, autoplay = false) => {
-  if (!url) return "";
-  let id = "";
-  if (url.includes("youtube.com/shorts/")) {
-    id = url.split("shorts/")[1].split(/[?#]/)[0];
-  } else if (url.includes("youtu.be/")) {
-    id = url.split("youtu.be/")[1].split(/[?#]/)[0];
-  } else if (url.includes("youtube.com/watch")) {
-    const match = url.match(/[?&]v=([^&#]+)/);
-    id = match ? match[1] : "";
-  } else if (url.includes("instagram.com")) {
-    const match = url.match(/instagram.com\/(p|reel|reels)\/([^/?#&]+)/);
-    return match ? `https://www.instagram.com/${match[1]}/${match[2]}/embed/captioned=0` : url;
-  }
-
-  if (id) {
-    return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1&controls=1${autoplay ? "&autoplay=1" : ""}`;
-  }
-  return url;
-};
-
-const handleVideoPlay = (index) => {
-  activeVideoIndex.value = index;
-  stopOtherVideos(index);
-};
-
-const stopOtherVideos = (currentIndex) => {
-  videoRefs.value.forEach((video, idx) => {
-    if (idx !== currentIndex && video) {
-      video.pause();
-    }
-  });
-};
 
 const onResize = () => {
   if (import.meta.client) {
