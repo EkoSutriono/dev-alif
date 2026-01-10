@@ -5,7 +5,7 @@
     class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-linear-to-b from-black via-black/20 to-white md:py-24 py-4 text-white fade-up-reveal"
   >
     <div v-animate.once.stagger class="container mx-auto px-4 relative z-10">
-      <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 mb-32">
+      <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 md:mb-32 mb-16">
         <div
           class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center animate-item"
         >
@@ -26,7 +26,7 @@
             Bio Singkat
             <span class="text-white decoration-white decoration-4">Alif Ma'luf</span>
           </h2>
-          <div class="space-y-4 text-gray-300 text-lg leading-relaxed">
+          <div class="space-y-4 text-gray-300 md:text-lg text-sm leading-relaxed">
             <p>
               Professional AI-Driven Commercial Video Creator yang berfokus pada pembuatan video
               iklan dan campaign visual berbasis AI untuk brand, produk, dan jasa.
@@ -104,7 +104,7 @@
               <NuxtImg
                 :src="logo"
                 alt="Client Logo Alif Ma'luf"
-                class="w-28 h-14 md:w-32 md:h-16 object-contain"
+                class="w-16 h-12 md:w-32 md:h-16 object-contain"
                 format="webp"
                 loading="lazy"
               />
@@ -120,7 +120,7 @@
               <NuxtImg
                 :src="logo"
                 alt="Client Logo Alif Ma'luf"
-                class="w-28 h-14 md:w-32 md:h-16 object-contain"
+                class="w-16 h-12 md:w-32 md:h-16 object-contain"
                 format="webp"
                 loading="lazy"
               />
@@ -138,7 +138,10 @@ import { Vue3Marquee } from "vue3-marquee";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
 import { videoList, clientLogo } from "~/constant/assets";
 
-const stopImages = ["https://cdn.qiblat.my.id/stop 1.png", "https://cdn.qiblat.my.id/stop 2.png"];
+const stopImages = [
+  "https://cdn.qiblat.my.id/stop 1.png",
+  "https://cdn.qiblat.my.id/stop-2-new.png",
+];
 
 const activeFrame = ref(0);
 let stopInterval = null;

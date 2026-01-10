@@ -38,7 +38,7 @@
                   >
                     {{ idx + 1 }}
                   </div>
-                  <h4 class="text-xl font-bold uppercase tracking-wider">
+                  <h4 class="md:text-xl text-lg font-bold uppercase tracking-wider">
                     {{ chapter.title }}
                   </h4>
                 </div>

@@ -68,7 +68,7 @@
             <div class="flex justify-between items-center mb-2">
               <h3 class="text-2xl font-black text-[#947a23] uppercase">Ultimate</h3>
               <span
-                class="px-3 py-1 bg-[#947a23] text-[10px] font-black uppercase text-white rounded-full"
+                class="px-3 py-1 bg-[#947a23] text-[10px] font-black uppercase text-white rounded-full text-center"
               >
                 Paling Populer
               </span>

@@ -128,6 +128,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  thumbnail: {
+    type: String,
+    default: null,
+  },
 });
 
 const { registerPlayer, unregisterPlayer, onPlay } = useVideoManager();
@@ -173,6 +177,7 @@ const videoId = computed(() => {
 });
 
 const thumbnailUrl = computed(() => {
+  if (props.thumbnail) return props.thumbnail;
   if (type.value === "youtube" && videoId.value) {
     return `https://i.ytimg.com/vi/${videoId.value}/hqdefault.jpg`;
   }
