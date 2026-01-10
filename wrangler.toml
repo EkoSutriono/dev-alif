@@ -1,5 +1,6 @@
 # Cloudflare Pages configuration
 name = "alif-landing-page"
+pages_build_output_dir = ".output/public"
 
 [build]
-command = "bun run build"
+command = "npm run cf-build"
