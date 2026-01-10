@@ -53,7 +53,7 @@
             :autoplay="4000"
             :wrap-around="true"
             :pause-autoplay-on-hover="true"
-            :items-to-show="'auto'"
+            :items-to-show="windowWidth < 768 ? 1.2 : 'auto'"
             :snap-align="'center'"
             class="results-carousel w-full"
           >
@@ -162,7 +162,19 @@ const onResize = () => {
 
 onMounted(() => {
   windowWidth.value = window.innerWidth;
-  window.addEventListener("resize", onResize);
+  const throttledResize = () => {
+    let timeout = null;
+    return () => {
+      if (!timeout) {
+        timeout = setTimeout(() => {
+          onResize();
+          timeout = null;
+        }, 200);
+      }
+    };
+  };
+  const handleResize = throttledResize();
+  window.addEventListener("resize", handleResize);
 
   stopInterval = setInterval(() => {
     activeFrame.value = activeFrame.value >= stopImages.length - 1 ? 0 : activeFrame.value + 1;
@@ -170,7 +182,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  window.removeEventListener("resize", onResize);
+  window.removeEventListener("resize", handleResize);
   clearInterval(stopInterval);
 });
 

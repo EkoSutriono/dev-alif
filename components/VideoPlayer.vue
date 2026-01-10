@@ -162,7 +162,6 @@ const videoId = computed(() => {
   const url = props.url;
 
   if (type.value === "youtube") {
-    // Standard, Embed, Shorts, and youtu.be links
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
     const match = url.match(regExp);
     if (match && match[2].length === 11) return match[2];
@@ -246,11 +245,18 @@ const initYoutube = () => {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
 
+  let attempts = 0;
+  const maxAttempts = 50;
   const checkYT = setInterval(() => {
+    attempts++;
     if (window.YT && window.YT.Player) {
       clearInterval(checkYT);
       window.loadingYTAPI = false;
       createPlayer();
+    } else if (attempts >= maxAttempts) {
+      clearInterval(checkYT);
+      window.loadingYTAPI = false;
+      console.warn("YouTube API failed to load");
     }
   }, 100);
 };
@@ -285,10 +291,16 @@ const createPlayer = () => {
 
 onUnmounted(() => {
   if (player.value) {
-    if (typeof player.value.destroy === "function") {
-      player.value.destroy();
+    try {
+      if (typeof player.value.destroy === "function") {
+        player.value.destroy();
+      }
+    } catch (e) {
+      console.error("Error destroying player:", e);
     }
     unregisterPlayer(playerId);
+    player.value = null;
   }
+  isActive.value = false;
 });
 </script>
