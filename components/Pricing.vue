@@ -1,18 +1,17 @@
 <template>
   <section
     id="pricing"
-    v-animate.once
-    class="bg-white md:py-32 py-16 relative overflow-hidden text-black fade-up-reveal"
+    data-aos="fade-up"
+    class="bg-white md:py-32 py-16 relative overflow-hidden text-black"
   >
     <div class="container mx-auto px-4 relative z-10">
       <h2 class="text-3xl md:text-5xl font-black text-center md:mb-24 mb-8 uppercase">Pricing</h2>
 
-      <div
-        v-animate.once.stagger
-        class="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto"
-      >
+      <div class="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto">
         <div
-          class="w-full md:w-1/2 bg-white rounded-[2.5rem] border border-black/10 overflow-hidden flex flex-col group hover:border-black/30 transition-all duration-500 hover:shadow-2xl hover:shadow-black/5 animate-item"
+          data-aos="fade-up"
+          data-aos-delay="200"
+          class="w-full md:w-1/2 bg-white rounded-[2.5rem] border border-black/10 overflow-hidden flex flex-col group hover:border-black/30 transition-all duration-500 hover:shadow-2xl hover:shadow-black/5"
         >
           <div class="p-8 border-b border-black/5">
             <h3 class="text-2xl font-black text-black mb-2 uppercase">Premium</h3>
@@ -60,7 +59,9 @@
         </div>
 
         <div
-          class="ultimate-border w-full md:w-1/2 bg-white rounded-[2.5rem] overflow-hidden flex flex-col relative group hover:shadow-2xl hover:shadow-black/10 transition-all duration-500 animate-item"
+          data-aos="fade-up"
+          data-aos-delay="400"
+          class="ultimate-border w-full md:w-1/2 bg-white rounded-[2.5rem] overflow-hidden flex flex-col relative group hover:shadow-2xl hover:shadow-black/10 transition-all duration-500"
         >
           <div class="absolute top-0 left-0 right-0 h-2 bg-[#947a23]"></div>
 
@@ -121,11 +122,11 @@
 </template>
 
 <script setup>
-const premiumFeatures = ["Materi 5 Bab inti", "20+ modul pembelajaran", "Akses selamanya"];
+const premiumFeatures = ["Materi 5 Bab inti", "25+ modul pembelajaran", "Akses selamanya"];
 
 const ultimateFeatures = [
   "Materi 5 Bab inti",
-  "20+ modul pembelajaran",
+  "25+ modul pembelajaran",
   "Akses selamanya",
   "Grup komunitas",
   "Update materi & teknik baru",

@@ -12,8 +12,9 @@
         <div
           v-for="(highlight, idx) in highlights"
           :key="idx"
-          v-animate.once
-          class="fade-up-reveal flex flex-col md:flex-row items-center gap-12 lg:gap-16 border-2 rounded-2xl md:p-8 p-4 border-white"
+          data-aos="fade-up"
+          :data-aos-delay="idx * 150"
+          class="flex flex-col md:flex-row items-center gap-12 lg:gap-16 border-2 rounded-2xl md:p-8 p-4 border-white"
           :class="{ 'md:flex-row-reverse': idx % 2 !== 0 }"
         >
           <div class="w-full md:w-1/2 lg:w-3/5">

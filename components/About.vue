@@ -6,6 +6,7 @@
     <div class="container mx-auto px-4 relative z-10">
       <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 md:mb-32 mb-16">
         <div
+          data-aos="fade-right"
           class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center"
         >
           <NuxtImg
@@ -20,7 +21,7 @@
           />
         </div>
 
-        <div class="w-full md:w-1/2">
+        <div data-aos="fade-left" class="w-full md:w-1/2">
           <h2 class="text-4xl font-black mb-6 tracking-tight text-white">
             Bio Singkat
             <span class="text-white decoration-white decoration-4">Alif Ma'luf</span>
@@ -39,11 +40,14 @@
         </div>
       </div>
 
-      <h3 class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-white">
+      <h3
+        data-aos="fade-up"
+        class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-white"
+      >
         Hasil Beberapa Video AI
       </h3>
 
-      <div class="relative group/slider min-h-[300px] md:px-12 w-full">
+      <div data-aos="fade-up" class="relative group/slider min-h-[300px] md:px-12 w-full">
         <client-only>
           <Carousel
             :autoplay="autoplayPaused ? 0 : 50"
@@ -92,41 +96,46 @@
       </div>
     </div>
 
-    <div class="md:mt-24 mt-16 bg-white rounded-[60px] shadow-xl p-8 container mx-auto">
-      <p class="text-center text-black font-medium mb-10 uppercase tracking-widest text-sm">
-        Klien yang telah bekerja sama
-      </p>
+    <div class="px-4">
+      <div
+        data-aos="fade-up"
+        class="md:mt-24 mt-16 bg-white md:rounded-[60px] rounded-[2.5rem] shadow-xl p-8 container mx-auto"
+      >
+        <p class="text-center text-black font-medium mb-10 uppercase tracking-widest text-sm">
+          Klien yang telah bekerja sama
+        </p>
 
-      <div class="space-y-4">
-        <client-only>
-          <Vue3Marquee :duration="windowWidth < 768 ? 15 : 40" :pause-on-hover="true">
-            <div v-for="(logo, index) in firstRow" :key="index" class="client-logo px-5">
-              <NuxtImg
-                :src="logo"
-                alt="Client Logo Alif Ma'luf"
-                class="w-16 h-12 md:w-32 md:h-16 object-contain"
-                format="webp"
-                loading="lazy"
-              />
-            </div>
-          </Vue3Marquee>
+        <div class="space-y-4">
+          <client-only>
+            <Vue3Marquee :duration="windowWidth < 768 ? 15 : 40" :pause-on-hover="true">
+              <div v-for="(logo, index) in firstRow" :key="index" class="client-logo px-5">
+                <NuxtImg
+                  :src="logo"
+                  alt="Client Logo Alif Ma'luf"
+                  class="w-16 h-12 md:w-32 md:h-16 object-contain"
+                  format="webp"
+                  loading="lazy"
+                />
+              </div>
+            </Vue3Marquee>
 
-          <Vue3Marquee
-            :duration="windowWidth < 768 ? 15 : 40"
-            :direction="'reverse'"
-            :pause-on-hover="true"
-          >
-            <div v-for="(logo, index) in secondRow" :key="index" class="client-logo px-5">
-              <NuxtImg
-                :src="logo"
-                alt="Client Logo Alif Ma'luf"
-                class="w-16 h-12 md:w-32 md:h-16 object-contain"
-                format="webp"
-                loading="lazy"
-              />
-            </div>
-          </Vue3Marquee>
-        </client-only>
+            <Vue3Marquee
+              :duration="windowWidth < 768 ? 15 : 40"
+              :direction="'reverse'"
+              :pause-on-hover="true"
+            >
+              <div v-for="(logo, index) in secondRow" :key="index" class="client-logo px-5">
+                <NuxtImg
+                  :src="logo"
+                  alt="Client Logo Alif Ma'luf"
+                  class="w-16 h-12 md:w-32 md:h-16 object-contain"
+                  format="webp"
+                  loading="lazy"
+                />
+              </div>
+            </Vue3Marquee>
+          </client-only>
+        </div>
       </div>
     </div>
   </section>

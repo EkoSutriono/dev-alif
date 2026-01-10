@@ -1,19 +1,19 @@
 <template>
-  <section id="materi" v-animate.once class="bg-black py-24 text-white fade-in-reveal">
+  <section id="materi" data-aos="fade" class="bg-black py-24 text-white">
     <div class="container mx-auto px-4">
       <div class="bg-white/5 rounded-[2.5rem] border border-white/10 p-8 md:p-16">
         <h2
-          v-animate.once
-          class="text-3xl md:text-5xl font-black text-center mb-16 text-white uppercase fade-up-reveal"
+          data-aos="fade-up"
+          class="text-3xl md:text-5xl font-black text-center mb-16 text-white uppercase"
         >
           Materi yang akan
           <span class="decoration-white decoration-4">dipelajari</span>
         </h2>
 
         <div class="flex flex-col lg:flex-row gap-16">
-          <div v-animate.once class="w-full lg:w-5/12 scale-in-reveal">
+          <div data-aos="zoom-in" class="w-full lg:w-5/12">
             <div
-              class="sticky top-24 aspect-square rounded-3xl bg-black border border-white/10 overflow-hidden"
+              class="sticky top-24 aspect-5/4 rounded-3xl bg-black border border-white/10 overflow-hidden"
             >
               <client-only>
                 <video
@@ -29,9 +29,15 @@
             </div>
           </div>
 
-          <div v-animate.once.stagger class="w-full lg:w-7/12">
+          <div class="w-full lg:w-7/12">
             <div class="space-y-8">
-              <div v-for="(chapter, idx) in chapters" :key="idx" class="group animate-item">
+              <div
+                v-for="(chapter, idx) in chapters"
+                :key="idx"
+                data-aos="fade-up"
+                :data-aos-delay="idx * 100"
+                class="group"
+              >
                 <div class="flex items-center gap-6 mb-4">
                   <div
                     class="flex-none h-12 w-12 rounded-xl bg-white border border-white/10 flex items-center justify-center text-black font-bold"
