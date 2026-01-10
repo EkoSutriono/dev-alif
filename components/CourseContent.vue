@@ -15,15 +15,17 @@
             <div
               class="sticky top-24 aspect-square rounded-3xl bg-black border border-white/10 overflow-hidden"
             >
-              <video
-                autoplay
-                muted
-                loop
-                playsinline
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full object-cover"
-              >
-                <source src="/video/intro-lp.mp4" type="video/mp4" />
-              </video>
+              <client-only>
+                <video
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full object-cover"
+                >
+                  <source :src="introVideo" type="video/mp4" />
+                </video>
+              </client-only>
             </div>
           </div>
 
@@ -76,6 +78,10 @@
 </template>
 
 <script setup>
+import { videoList } from "~/constant/assets";
+
+const introVideo = videoList.find((v) => v.title === "Intro LP")?.url;
+
 const chapters = [
   {
     title: "Bab 1: Memahami AI",

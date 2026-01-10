@@ -45,6 +45,16 @@ export const videoList = [
     type: "landscape",
   },
   {
+    title: "Intro LP Hero",
+    url: "/video/intro-lp-hero.mp4",
+    type: "landscape",
+  },
+  {
+    title: "Intro LP",
+    url: "/video/intro-lp.mp4",
+    type: "landscape",
+  },
+  {
     title: "Fraghead Blue Trident",
     url: "/video/fraghead-video.mp4",
     type: "portrait",
