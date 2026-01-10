@@ -4,11 +4,9 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "cf-build": "npm ci --ignore-scripts && nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare || echo 'Warning: Type generation failed, continuing...'",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."
