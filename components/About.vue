@@ -10,12 +10,15 @@
         <div
           class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center animate-item"
         >
-          <img
+          <NuxtImg
             v-for="(img, index) in stopImages"
             :key="index"
             :src="img"
             class="absolute w-auto h-[90%] object-contain transition-none rounded-2xl"
             :class="index === activeFrame ? 'opacity-100' : 'opacity-0'"
+            alt="Alif Ma'luf Bio Visual"
+            format="webp"
+            loading="lazy"
           />
         </div>
 
@@ -96,7 +99,13 @@
         <client-only>
           <Vue3Marquee :duration="windowWidth < 768 ? 15 : 40" :pause-on-hover="true">
             <div v-for="(logo, index) in firstRow" :key="index" class="client-logo px-5">
-              <img :src="logo" alt="Client Logo" class="w-28 h-14 md:w-32 md:h-16 object-contain" />
+              <NuxtImg
+                :src="logo"
+                alt="Client Logo Alif Ma'luf"
+                class="w-28 h-14 md:w-32 md:h-16 object-contain"
+                format="webp"
+                loading="lazy"
+              />
             </div>
           </Vue3Marquee>
 
@@ -106,7 +115,13 @@
             :pause-on-hover="true"
           >
             <div v-for="(logo, index) in secondRow" :key="index" class="client-logo px-5">
-              <img :src="logo" alt="Client Logo" class="w-28 h-14 md:w-32 md:h-16 object-contain" />
+              <NuxtImg
+                :src="logo"
+                alt="Client Logo Alif Ma'luf"
+                class="w-28 h-14 md:w-32 md:h-16 object-contain"
+                format="webp"
+                loading="lazy"
+              />
             </div>
           </Vue3Marquee>
         </client-only>

@@ -21,6 +21,7 @@
                   muted
                   loop
                   playsinline
+                  poster="https://cdn.qiblat.my.id/Logo-only-Alif-Maluf.png"
                   class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full object-cover"
                 >
                   <source :src="introVideo" type="video/mp4" />
