@@ -78,9 +78,7 @@
 </template>
 
 <script setup>
-import { videoList } from "~/constant/assets";
-
-const introVideo = videoList.find((v) => v.title === "Intro LP")?.url;
+const introVideo = "https://cdn.qiblat.my.id/intro-lp.mp4";
 
 const chapters = [
   {

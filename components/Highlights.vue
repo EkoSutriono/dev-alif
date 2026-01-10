@@ -8,25 +8,20 @@
         <span class="decoration-white decoration-4">Beberapa Materi</span>
       </h2>
 
-      <div class="space-y-0">
+      <div class="space-y-8">
         <div
           v-for="(highlight, idx) in highlights"
           :key="idx"
           v-animate.once
-          class="fade-up-reveal flex flex-col md:flex-row items-center gap-12 lg:gap-16 md:py-24 py-1 border-b border-white/10 last:border-0"
+          class="fade-up-reveal flex flex-col md:flex-row items-center gap-12 lg:gap-16 border-2 rounded-2xl md:p-8 p-4 border-white"
           :class="{ 'md:flex-row-reverse': idx % 2 !== 0 }"
         >
           <div class="w-full md:w-1/2 lg:w-3/5">
-            <div
-              class="relative aspect-video rounded-3xl overflow-hidden border border-white/10 bg-black group"
-            >
-              <iframe
+            <div class="relative aspect-video rounded-3xl overflow-hidden bg-black group">
+              <VideoPlayer
+                :url="highlight.video"
                 class="w-full h-full transition-transform duration-700 group-hover:scale-105"
-                :src="getYoutubeEmbed(highlight.video)"
-                frameborder="0"
-                allow="autoplay; encrypted-media; fullscreen"
-                allowfullscreen
-              ></iframe>
+              />
             </div>
           </div>
           <div class="w-full md:w-1/2 lg:w-2/5">
@@ -74,18 +69,4 @@ const highlights = [
     video: "https://youtu.be/7n7gBfI9uao",
   },
 ];
-
-const getYoutubeEmbed = (url) => {
-  if (!url) return null;
-
-  const id = url.includes("youtu.be")
-    ? url.split("youtu.be/")[1].split("?")[0]
-    : url.includes("v=")
-      ? url.split("v=")[1].split("&")[0]
-      : null;
-
-  if (!id) return null;
-
-  return `https://www.youtube.com/embed/${id}?autoplay=0&mute=0&controls=1&rel=0&playsinline=1`;
-};
 </script>

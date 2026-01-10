@@ -68,9 +68,8 @@
 
 <script setup>
 import Avatar from "./ui/avatar.vue";
-import { videoList } from "~/constant/assets";
 
-const heroVideo = videoList.find((v) => v.title === "Intro LP Hero")?.url;
+const heroVideo = "https://cdn.qiblat.my.id/intro-lp-hero.mp4";
 </script>
 
 <style scoped></style>

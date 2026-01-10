@@ -31,7 +31,7 @@ export const videoList = [
   },
   {
     title: "Pusat Gadai Indonesia",
-    url: "https://youtu.be/v-v2R9nZEWY",
+    url: "https://www.youtube.com/embed/v-v2R9nZEWY?si=xgtdJcXstqXJJ_fk",
     type: "landscape",
   },
   {
@@ -45,18 +45,8 @@ export const videoList = [
     type: "landscape",
   },
   {
-    title: "Intro LP Hero",
-    url: "/video/intro-lp-hero.mp4",
-    type: "landscape",
-  },
-  {
-    title: "Intro LP",
-    url: "/video/intro-lp.mp4",
-    type: "landscape",
-  },
-  {
     title: "Fraghead Blue Trident",
-    url: "/video/fraghead-video.mp4",
+    url: "https://cdn.qiblat.my.id/fraghead-video.mp4",
     type: "portrait",
   },
   {

@@ -3,23 +3,34 @@
     class="relative overflow-hidden bg-black group/player"
     :class="[isBackground ? 'absolute inset-0 pointer-events-none' : 'w-full h-full']"
   >
-    <!-- 1. Autoplay Background Videos (Direct Iframe) -->
-    <iframe
-      v-if="useDirectIframe && videoId"
-      class="w-full h-full"
-      :class="{ 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2': aspectCover }"
-      :style="
-        aspectCover
-          ? { minWidth: '100%', minHeight: '100%', width: '177.77vh', height: '56.25vw' }
-          : {}
-      "
-      :src="directEmbedUrl"
-      frameborder="0"
-      allow="autoplay; encrypted-media; fullscreen"
-      allowfullscreen
-    ></iframe>
+    <template v-if="autoplay">
+      <iframe
+        v-if="type === 'youtube' && videoId"
+        class="w-full h-full"
+        :class="{ 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2': aspectCover }"
+        :style="
+          aspectCover
+            ? { minWidth: '100%', minHeight: '100%', width: '177.77vh', height: '56.25vw' }
+            : {}
+        "
+        :src="directEmbedUrl"
+        frameborder="0"
+        allow="autoplay; encrypted-media; fullscreen; compute-pressure"
+        allowfullscreen
+      ></iframe>
+      <video
+        v-else-if="type === 'native'"
+        autoplay
+        muted
+        loop
+        playsinline
+        class="w-full h-full object-cover"
+        :class="{ 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2': aspectCover }"
+      >
+        <source :src="url" type="video/mp4" />
+      </video>
+    </template>
 
-    <!-- 2. Non-Autoplay Videos (Thumbnail Facade) -->
     <template v-else>
       <div v-if="isActive" class="w-full h-full">
         <div v-if="type === 'youtube'" :id="playerId" class="w-full h-full"></div>
@@ -28,9 +39,21 @@
           class="w-full h-full"
           :src="embedUrl"
           frameborder="0"
-          allow="autoplay; encrypted-media; fullscreen"
+          allow="autoplay; encrypted-media; fullscreen; compute-pressure"
           allowfullscreen
         ></iframe>
+        <video
+          v-else-if="type === 'native'"
+          :id="playerId"
+          ref="player"
+          class="w-full h-full object-cover"
+          controls
+          autoplay
+          playsinline
+          @play="onPlay(playerId)"
+        >
+          <source :src="url" type="video/mp4" />
+        </video>
       </div>
 
       <div v-else-if="type" class="w-full h-full cursor-pointer relative" @click="handleStartVideo">
@@ -39,8 +62,19 @@
           :src="thumbnailUrl"
           class="w-full h-full object-cover brightness-75 group-hover/player:brightness-90 transition-all duration-500 scale-105 group-hover/player:scale-100"
           alt="Video Preview"
-          @error="(e) => (e.target.src = hqThumbnailUrl)"
+          @error="handleThumbnailError"
         />
+        <video
+          v-else-if="type === 'native' && !isActive"
+          class="w-full h-full object-cover brightness-75 group-hover/player:brightness-90 transition-all duration-500 scale-105 group-hover/player:scale-100"
+          preload="metadata"
+          muted
+          playsinline
+        >
+          <source :src="url" type="video/mp4" />
+        </video>
+        <div v-else class="w-full h-full bg-black"></div>
+
         <div class="absolute inset-0 flex items-center justify-center">
           <div
             class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover/player:scale-110 group-hover/player:bg-white/30 transition-all duration-300"
@@ -97,48 +131,67 @@ const props = defineProps({
 });
 
 const { registerPlayer, unregisterPlayer, onPlay } = useVideoManager();
-const playerId = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
+const playerId = `v-player-${Math.random().toString(36).substr(2, 9)}`;
 const player = ref(null);
 const isActive = ref(false);
 
 const type = computed(() => {
   if (!props.url) return null;
-  if (props.url.includes("youtube.com") || props.url.includes("youtu.be")) return "youtube";
-  if (props.url.includes("instagram.com")) return "instagram";
+  const u = props.url.toLowerCase();
+
+  if (u.includes("youtube.com") || u.includes("youtu.be")) return "youtube";
+  if (u.includes("instagram.com")) return "instagram";
+
+  if (
+    u.includes(".mp4") ||
+    u.includes("cdn.qiblat.my.id") ||
+    u.startsWith("/") ||
+    (u.startsWith("http") && !u.includes("youtube") && !u.includes("instagram"))
+  ) {
+    return "native";
+  }
   return null;
 });
 
 const videoId = computed(() => {
   if (!props.url) return null;
+  const url = props.url;
+
   if (type.value === "youtube") {
-    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-    const match = props.url.match(regExp);
-    return match && match[7].length === 11 ? match[7] : null;
+    // Standard, Embed, Shorts, and youtu.be links
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) return match[2];
   }
+
   if (type.value === "instagram") {
-    const match = props.url.match(/instagram.com\/(p|reel|reels)\/([^/?#&]+)/);
+    const match = url.match(/instagram.com\/(p|reel|reels)\/([^/?#&]+)/);
     return match ? match[2] : null;
   }
+
   return null;
 });
 
 const thumbnailUrl = computed(() => {
   if (type.value === "youtube" && videoId.value) {
-    return `https://img.youtube.com/vi/${videoId.value}/maxresdefault.jpg`;
+    return `https://i.ytimg.com/vi/${videoId.value}/hqdefault.jpg`;
   }
   return null;
 });
 
-const hqThumbnailUrl = computed(() => {
+const mqThumbnailUrl = computed(() => {
   if (type.value === "youtube" && videoId.value) {
-    return `https://img.youtube.com/vi/${videoId.value}/hqdefault.jpg`;
+    return `https://i.ytimg.com/vi/${videoId.value}/mqdefault.jpg`;
   }
   return null;
 });
 
-const useDirectIframe = computed(() => {
-  return props.autoplay && type.value === "youtube";
-});
+const handleThumbnailError = (e) => {
+  const currentSrc = e.target.src;
+  if (currentSrc.includes("hqdefault")) {
+    e.target.src = mqThumbnailUrl.value;
+  }
+};
 
 const directEmbedUrl = computed(() => {
   if (type.value === "youtube" && videoId.value) {
@@ -163,6 +216,14 @@ const handleStartVideo = () => {
     nextTick(() => {
       initYoutube();
     });
+  } else if (type.value === "native") {
+    nextTick(() => {
+      if (player.value) {
+        registerPlayer(playerId, player.value);
+      }
+    });
+  } else if (type.value === "instagram") {
+    onPlay(playerId);
   }
 };
 
@@ -180,7 +241,6 @@ const initYoutube = () => {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
 
-  // Polling check for YT API readiness if not using the official callback to avoid conflicts
   const checkYT = setInterval(() => {
     if (window.YT && window.YT.Player) {
       clearInterval(checkYT);
