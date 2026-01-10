@@ -51,6 +51,8 @@
           autoplay
           playsinline
           @play="onPlay(playerId)"
+          @pause="onStop(playerId)"
+          @ended="onStop(playerId)"
         >
           <source :src="url" type="video/mp4" />
         </video>
@@ -134,7 +136,7 @@ const props = defineProps({
   },
 });
 
-const { registerPlayer, unregisterPlayer, onPlay } = useVideoManager();
+const { registerPlayer, unregisterPlayer, onPlay, onStop } = useVideoManager();
 const playerId = `v-player-${Math.random().toString(36).substr(2, 9)}`;
 const player = ref(null);
 const isActive = ref(false);
@@ -283,6 +285,11 @@ const createPlayer = () => {
       onStateChange: (event) => {
         if (event.data === window.YT.PlayerState.PLAYING) {
           onPlay(playerId);
+        } else if (
+          event.data === window.YT.PlayerState.PAUSED ||
+          event.data === window.YT.PlayerState.ENDED
+        ) {
+          onStop(playerId);
         }
       },
     },

@@ -27,10 +27,17 @@ export const useVideoManager = () => {
     currentlyPlayingId.value = id;
   };
 
+  const onStop = (id) => {
+    if (currentlyPlayingId.value === id) {
+      currentlyPlayingId.value = null;
+    }
+  };
+
   return {
     registerPlayer,
     unregisterPlayer,
     onPlay,
+    onStop,
     currentlyPlayingId,
   };
 };

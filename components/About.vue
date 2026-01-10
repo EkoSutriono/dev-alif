@@ -50,19 +50,17 @@
       <div class="relative group/slider min-h-[300px] px-2 md:px-16 w-full overflow-hidden">
         <client-only>
           <Carousel
-            :autoplay="4000"
+            :autoplay="!!currentlyPlayingId ? 0 : 1"
+            :transition="windowWidth < 768 ? 4000 : 3000"
             :wrap-around="true"
-            :pause-autoplay-on-hover="true"
             :items-to-show="windowWidth < 768 ? 1.2 : 'auto'"
             :snap-align="'center'"
-            class="results-carousel w-full"
+            :mouse-drag="true"
+            :touch-drag="true"
+            class="results-carousel draggable-marquee w-full"
           >
             <Slide v-for="(video, index) in videoListSrc" :key="index">
-              <div
-                class="carousel__item px-2"
-                @mouseenter="stopAutoScrollManually"
-                @mouseleave="startAutoScrollManually"
-              >
+              <div class="px-2">
                 <div
                   class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 group relative h-[400px] md:h-[500px] aspect-9/16"
                   :class="video.type === 'portrait' ? 'aspect-9/16' : 'aspect-video'"
@@ -71,10 +69,6 @@
                 </div>
               </div>
             </Slide>
-
-            <template #addons>
-              <Navigation />
-            </template>
           </Carousel>
           <template #placeholder>
             <div class="flex gap-4 overflow-hidden px-2 md:px-16 w-full">
@@ -135,8 +129,11 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { Vue3Marquee } from "vue3-marquee";
-import { Carousel, Slide, Navigation } from "vue3-carousel";
+import { Carousel, Slide } from "vue3-carousel";
 import { videoList, clientLogo } from "~/constant/assets";
+import { useVideoManager } from "~/composables/useVideoManager";
+
+const { currentlyPlayingId } = useVideoManager();
 
 const stopImages = [
   "https://cdn.qiblat.my.id/stop 1.png",
@@ -185,9 +182,6 @@ onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
   clearInterval(stopInterval);
 });
-
-const stopAutoScrollManually = () => {};
-const startAutoScrollManually = () => {};
 </script>
 
 <style scoped>
@@ -205,47 +199,9 @@ const startAutoScrollManually = () => {};
   flex-shrink: 0;
 }
 
-:deep(.carousel__prev),
-:deep(.carousel__next) {
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  border-radius: 9999px;
-  width: 32px;
-  height: 32px;
-  transition: all 0.3s;
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-@media (min-width: 350px) {
-  :deep(.carousel__prev),
-  :deep(.carousel__next) {
-    width: 40px;
-    height: 40px;
-  }
-}
-
-@media (min-width: 768px) {
-  :deep(.carousel__prev),
-  :deep(.carousel__next) {
-    width: 48px;
-    height: 48px;
-  }
-}
-
-:deep(.carousel__prev:hover),
-:deep(.carousel__next:hover) {
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
-:deep(.carousel__prev) {
-  left: 10px;
-}
-:deep(.carousel__next) {
-  right: 10px;
+/* Linear motion for marquee effect */
+:deep(.draggable-marquee .carousel__track) {
+  transition-timing-function: linear !important;
 }
 
 :deep(.carousel__slide) {
