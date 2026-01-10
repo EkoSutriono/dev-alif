@@ -2,6 +2,7 @@
   <section
     id="about"
     class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-linear-to-b from-black via-black/20 to-white md:py-24 py-4 text-white"
+    style="isolation: isolate; transform: translateZ(0)"
   >
     <div class="container mx-auto px-4 relative z-10">
       <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 md:mb-32 mb-16">
@@ -14,6 +15,7 @@
             :key="index"
             :src="img"
             class="absolute w-auto h-[90%] object-contain transition-none rounded-2xl"
+            style="will-change: opacity; backface-visibility: hidden; transform: translateZ(0)"
             :class="index === activeFrame ? 'opacity-100' : 'opacity-0'"
             alt="Alif Ma'luf Bio Visual"
             format="webp"
@@ -59,7 +61,7 @@
             :mouse-drag="false"
             :touch-drag="false"
             :pause-autoplay-on-hover="true"
-            class="results-carousel w-full overflow-visible"
+            class="draggable-marquee results-carousel w-full overflow-visible"
             :class="{ 'is-paused': autoplayPaused }"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
@@ -228,6 +230,7 @@ onUnmounted(() => {
 :deep(.draggable-marquee:not(.is-paused) .carousel__track) {
   transition-timing-function: linear !important;
   will-change: transform;
+  transform: translateZ(0);
 }
 
 :deep(.draggable-marquee.is-paused .carousel__track) {
@@ -236,11 +239,11 @@ onUnmounted(() => {
 }
 
 :deep(.carousel__slide) {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding: 1rem 0.5rem;
   width: auto !important;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 :deep(.carousel__track) {
