@@ -46,7 +46,8 @@
           v-else-if="type === 'native'"
           :id="playerId"
           ref="player"
-          class="w-full h-full object-cover"
+          class="w-full h-full"
+          :class="[orientation === 'portrait' ? 'object-contain' : 'object-cover']"
           controls
           autoplay
           playsinline
@@ -133,6 +134,10 @@ const props = defineProps({
   thumbnail: {
     type: String,
     default: null,
+  },
+  orientation: {
+    type: String,
+    default: "landscape",
   },
 });
 
@@ -296,7 +301,30 @@ const createPlayer = () => {
   });
 };
 
+const handleFullscreenChange = () => {
+  if (props.orientation !== "portrait") return;
+
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
+      window.screen.orientation.lock("portrait").catch((err) => {
+        console.warn("Screen orientation lock failed:", err);
+      });
+    }
+  } else {
+    if (window.screen && window.screen.orientation && window.screen.orientation.unlock) {
+      window.screen.orientation.unlock();
+    }
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+});
+
 onUnmounted(() => {
+  document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
   if (player.value) {
     try {
       if (typeof player.value.destroy === "function") {
