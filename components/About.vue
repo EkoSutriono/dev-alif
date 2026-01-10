@@ -1,13 +1,12 @@
 <template>
   <section
     id="about"
-    v-animate.once
-    class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-linear-to-b from-black via-black/20 to-white md:py-24 py-4 text-white fade-up-reveal"
+    class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-linear-to-b from-black via-black/20 to-white md:py-24 py-4 text-white"
   >
-    <div v-animate.once.stagger class="container mx-auto px-4 relative z-10">
+    <div class="container mx-auto px-4 relative z-10">
       <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 md:mb-32 mb-16">
         <div
-          class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center animate-item"
+          class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center"
         >
           <NuxtImg
             v-for="(img, index) in stopImages"
@@ -21,7 +20,7 @@
           />
         </div>
 
-        <div class="w-full md:w-1/2 animate-item">
+        <div class="w-full md:w-1/2">
           <h2 class="text-4xl font-black mb-6 tracking-tight text-white">
             Bio Singkat
             <span class="text-white decoration-white decoration-4">Alif Ma'luf</span>
@@ -40,35 +39,43 @@
         </div>
       </div>
 
-      <h3
-        v-animate.once
-        class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-white fade-up-reveal"
-      >
+      <h3 class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-white">
         Hasil Beberapa Video AI
       </h3>
 
-      <div class="relative group/slider min-h-[300px] px-2 md:px-16 w-full overflow-hidden">
+      <div class="relative group/slider min-h-[300px] md:px-12 w-full">
         <client-only>
           <Carousel
-            :autoplay="!!currentlyPlayingId ? 0 : 1"
-            :transition="windowWidth < 768 ? 4000 : 3000"
+            :autoplay="autoplayPaused ? 0 : 1"
+            :transition="currentTransition"
             :wrap-around="true"
-            :items-to-show="windowWidth < 768 ? 1.2 : 'auto'"
+            :items-to-show="windowWidth < 768 ? 1.1 : 'auto'"
             :snap-align="'center'"
-            :mouse-drag="true"
-            :touch-drag="true"
-            class="results-carousel draggable-marquee w-full"
+            :mouse-drag="false"
+            :touch-drag="false"
+            class="results-carousel draggable-marquee w-full overflow-visible"
+            :class="{ 'is-paused': autoplayPaused }"
+            @mouseenter="isHovered = true"
+            @mouseleave="isHovered = false"
           >
             <Slide v-for="(video, index) in videoListSrc" :key="index">
               <div class="px-2">
                 <div
-                  class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 group relative h-[400px] md:h-[500px] aspect-9/16"
-                  :class="video.type === 'portrait' ? 'aspect-9/16' : 'aspect-video'"
+                  class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 group relative"
+                  :class="[
+                    video.type === 'portrait'
+                      ? 'h-[400px] md:h-[500px] aspect-9/16'
+                      : 'w-[85vw] md:w-auto md:h-[500px] aspect-video',
+                  ]"
                 >
                   <VideoPlayer :url="video.url" />
                 </div>
               </div>
             </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
           </Carousel>
           <template #placeholder>
             <div class="flex gap-4 overflow-hidden px-2 md:px-16 w-full">
@@ -83,10 +90,7 @@
       </div>
     </div>
 
-    <div
-      v-animate.once
-      class="md:mt-24 mt-16 bg-white rounded-[60px] shadow-xl p-8 container mx-auto"
-    >
+    <div class="md:mt-24 mt-16 bg-white rounded-[60px] shadow-xl p-8 container mx-auto">
       <p class="text-center text-black font-medium mb-10 uppercase tracking-widest text-sm">
         Klien yang telah bekerja sama
       </p>
@@ -129,11 +133,21 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { Vue3Marquee } from "vue3-marquee";
-import { Carousel, Slide } from "vue3-carousel";
+import { Carousel, Slide, Navigation } from "vue3-carousel";
 import { videoList, clientLogo } from "~/constant/assets";
 import { useVideoManager } from "~/composables/useVideoManager";
 
 const { currentlyPlayingId } = useVideoManager();
+
+const isHovered = ref(false);
+const carouselDuration = computed(() => (windowWidth.value < 768 ? 5000 : 4000));
+
+const autoplayPaused = computed(() => !!currentlyPlayingId.value || isHovered.value);
+
+const currentTransition = computed(() => {
+  if (autoplayPaused.value) return 500; // Snappy for manual navigation
+  return carouselDuration.value; // Slow and smooth for marquee
+});
 
 const stopImages = [
   "https://cdn.qiblat.my.id/stop 1.png",
@@ -199,9 +213,20 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
-/* Linear motion for marquee effect */
-:deep(.draggable-marquee .carousel__track) {
+:deep(.draggable-marquee:not(.is-paused) .carousel__track) {
   transition-timing-function: linear !important;
+  will-change: transform;
+}
+
+:deep(.draggable-marquee.is-paused .carousel__track) {
+  transition-duration: 0.1s !important;
+  transition-timing-function: ease-out !important;
+}
+
+@media (max-width: 768px) {
+  :deep(.draggable-marquee:not(.is-paused) .carousel__track) {
+    transition-duration: 5000ms !important;
+  }
 }
 
 :deep(.carousel__slide) {
@@ -214,5 +239,49 @@ onUnmounted(() => {
 
 :deep(.carousel__track) {
   align-items: stretch;
+}
+
+:deep(.carousel__prev),
+:deep(.carousel__next) {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s;
+  z-index: 20;
+  position: absolute;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0;
+}
+
+:deep(.carousel__prev:hover),
+:deep(.carousel__next:hover) {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.1) !important;
+}
+
+:deep(.carousel__prev:active),
+:deep(.carousel__next:active) {
+  transform: translateY(-50%) scale(0.95) !important;
+}
+
+:deep(.carousel__prev) {
+  left: 1rem;
+}
+
+:deep(.carousel__next) {
+  right: 1rem;
+}
+
+@media (max-width: 768px) {
+  :deep(.carousel__prev),
+  :deep(.carousel__next) {
+    width: 32px;
+    height: 32px;
+  }
 }
 </style>
