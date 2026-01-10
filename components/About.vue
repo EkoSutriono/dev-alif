@@ -46,14 +46,16 @@
       <div class="relative group/slider min-h-[300px] md:px-12 w-full">
         <client-only>
           <Carousel
-            :autoplay="autoplayPaused ? 0 : 1"
+            :autoplay="autoplayPaused ? 0 : 50"
             :transition="currentTransition"
+            :transition-easing="'linear'"
             :wrap-around="true"
             :items-to-show="windowWidth < 768 ? 1.1 : 'auto'"
             :snap-align="'center'"
             :mouse-drag="false"
             :touch-drag="false"
-            class="results-carousel draggable-marquee w-full overflow-visible"
+            :pause-autoplay-on-hover="true"
+            class="results-carousel w-full overflow-visible"
             :class="{ 'is-paused': autoplayPaused }"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
@@ -145,8 +147,8 @@ const carouselDuration = computed(() => (windowWidth.value < 768 ? 5000 : 4000))
 const autoplayPaused = computed(() => !!currentlyPlayingId.value || isHovered.value);
 
 const currentTransition = computed(() => {
-  if (autoplayPaused.value) return 500; // Snappy for manual navigation
-  return carouselDuration.value; // Slow and smooth for marquee
+  if (autoplayPaused.value) return 200; // Snappy for manual navigation
+  return carouselDuration.value - 50; // Compensate for 50ms autoplay delay
 });
 
 const stopImages = [
@@ -213,6 +215,7 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
+/* Extreme linear motion for marquee effect - only when autoplay is active */
 :deep(.draggable-marquee:not(.is-paused) .carousel__track) {
   transition-timing-function: linear !important;
   will-change: transform;
@@ -221,12 +224,6 @@ onUnmounted(() => {
 :deep(.draggable-marquee.is-paused .carousel__track) {
   transition-duration: 0.1s !important;
   transition-timing-function: ease-out !important;
-}
-
-@media (max-width: 768px) {
-  :deep(.draggable-marquee:not(.is-paused) .carousel__track) {
-    transition-duration: 5000ms !important;
-  }
 }
 
 :deep(.carousel__slide) {
