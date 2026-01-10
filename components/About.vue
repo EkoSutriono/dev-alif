@@ -1,11 +1,10 @@
 <template>
   <section
     id="about"
-    v-animate
+    v-animate.once
     class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-linear-to-b from-black via-black/20 to-white md:py-24 py-4 text-white fade-up-reveal"
   >
-    <div v-animate.stagger class="container mx-auto px-4 relative z-10">
-      <!-- Bio Section -->
+    <div v-animate.once.stagger class="container mx-auto px-4 relative z-10">
       <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 mb-32">
         <div
           class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center animate-item"
@@ -42,7 +41,7 @@
       </div>
 
       <h3
-        v-animate
+        v-animate.once
         class="text-center text-2xl font-bold mb-12 uppercase tracking-[0.2em] text-white fade-up-reveal"
       >
         Hasil Beberapa Video AI
@@ -90,7 +89,10 @@
       </div>
     </div>
 
-    <div v-animate class="md:mt-24 mt-16 bg-white rounded-[60px] shadow-xl p-8 container mx-auto">
+    <div
+      v-animate.once
+      class="md:mt-24 mt-16 bg-white rounded-[60px] shadow-xl p-8 container mx-auto"
+    >
       <p class="text-center text-black font-medium mb-10 uppercase tracking-widest text-sm">
         Klien yang telah bekerja sama
       </p>

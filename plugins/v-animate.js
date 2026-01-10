@@ -5,8 +5,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     mounted(el, binding) {
       const options = {
         root: null,
-        rootMargin: "0px",
-        threshold: 0.1,
+        rootMargin: "-50px 0px",
+        threshold: 0.01,
       };
 
       const observer = new IntersectionObserver((entries) => {
@@ -18,7 +18,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             if (binding.modifiers.stagger) {
               const items = el.querySelectorAll(".animate-item");
               items.forEach((item, index) => {
-                item.style.transitionDelay = `${index * 0.1}s`;
+                item.style.transitionDelay = `${index * 0.12}s`;
                 item.classList.add("animate-in");
                 item.classList.remove("animate-out");
               });
@@ -27,18 +27,16 @@ export default defineNuxtPlugin((nuxtApp) => {
             if (binding.modifiers.once) {
               observer.unobserve(el);
             }
-          } else {
-            if (!binding.modifiers.once) {
-              el.classList.add("animate-out");
-              el.classList.remove("animate-in");
+          } else if (!binding.modifiers.once) {
+            el.classList.add("animate-out");
+            el.classList.remove("animate-in");
 
-              if (binding.modifiers.stagger) {
-                const items = el.querySelectorAll(".animate-item");
-                items.forEach((item) => {
-                  item.classList.add("animate-out");
-                  item.classList.remove("animate-in");
-                });
-              }
+            if (binding.modifiers.stagger) {
+              const items = el.querySelectorAll(".animate-item");
+              items.forEach((item) => {
+                item.classList.add("animate-out");
+                item.classList.remove("animate-in");
+              });
             }
           }
         });

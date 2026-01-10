@@ -1,9 +1,9 @@
 <template>
-  <section id="materi" v-animate class="bg-black py-24 text-white fade-in-reveal">
+  <section id="materi" v-animate.once class="bg-black py-24 text-white fade-in-reveal">
     <div class="container mx-auto px-4">
       <div class="bg-white/5 rounded-[2.5rem] border border-white/10 p-8 md:p-16">
         <h2
-          v-animate
+          v-animate.once
           class="text-3xl md:text-5xl font-black text-center mb-16 text-white uppercase fade-up-reveal"
         >
           Materi yang akan
@@ -11,7 +11,7 @@
         </h2>
 
         <div class="flex flex-col lg:flex-row gap-16">
-          <div v-animate class="w-full lg:w-5/12 scale-in-reveal">
+          <div v-animate.once class="w-full lg:w-5/12 scale-in-reveal">
             <div
               class="sticky top-24 aspect-square rounded-3xl bg-black border border-white/10 overflow-hidden"
             >
@@ -21,7 +21,6 @@
                   muted
                   loop
                   playsinline
-                  poster="https://cdn.qiblat.my.id/Logo-only-Alif-Maluf.png"
                   class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none min-w-full min-h-full object-cover"
                 >
                   <source :src="introVideo" type="video/mp4" />
@@ -30,7 +29,7 @@
             </div>
           </div>
 
-          <div v-animate.stagger class="w-full lg:w-7/12">
+          <div v-animate.once.stagger class="w-full lg:w-7/12">
             <div class="space-y-8">
               <div v-for="(chapter, idx) in chapters" :key="idx" class="group animate-item">
                 <div class="flex items-center gap-6 mb-4">

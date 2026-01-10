@@ -1,14 +1,14 @@
 <template>
   <section
     id="pricing"
-    v-animate
+    v-animate.once
     class="bg-white md:py-32 py-16 relative overflow-hidden text-black fade-up-reveal"
   >
     <div class="container mx-auto px-4 relative z-10">
       <h2 class="text-3xl md:text-5xl font-black text-center md:mb-24 mb-8 uppercase">Pricing</h2>
 
       <div
-        v-animate.stagger
+        v-animate.once.stagger
         class="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto"
       >
         <div
