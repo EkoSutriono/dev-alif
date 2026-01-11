@@ -1,7 +1,7 @@
 <template>
   <section
     id="about"
-    class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-linear-to-b from-black via-black/20 to-white md:py-24 py-4"
+    class="relative -mt-20 overflow-hidden rounded-t-[60px] bg-black md:py-24 py-4"
   >
     <div class="container mx-auto px-4 relative z-10">
       <AboutBio />
