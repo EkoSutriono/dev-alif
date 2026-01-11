@@ -72,7 +72,7 @@ export const clientLogo = [
   "https://cdn.qiblat.my.id/logo-bic.png",
   "https://cdn.qiblat.my.id/logo-holigrels.png",
   "https://cdn.qiblat.my.id/logo-dasgo.PNG",
-  "https://cdn.qiblat.my.id/logo-drg.png",
+  "https://cdn.qiblat.my.id/logo-dr2.png",
   "https://cdn.qiblat.my.id/logo-impa.png",
   "https://cdn.qiblat.my.id/logo-dental.webp",
   "https://cdn.qiblat.my.id/logo-idp1.png",

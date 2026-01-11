@@ -7,17 +7,15 @@
       <div class="flex flex-col md:flex-row items-center md:gap-12 gap-6 md:mb-32 mb-16">
         <div
           data-aos="fade-right"
-          class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center"
+          class="w-full md:w-1/2 md:h-[400px] h-[200px] rounded-2xl relative overflow-hidden flex justify-center items-center bg-black/20"
         >
           <NuxtImg
-            v-for="(img, index) in stopImages"
-            v-show="index === activeFrame"
-            :key="img"
-            :src="img"
-            class="absolute w-auto h-[90%] object-contain rounded-2xl"
+            src="https://cdn.qiblat.my.id/alif.gif"
+            class="absolute w-auto h-[90%] object-contain rounded-2xl transition-opacity duration-300 ease-in-out"
             alt="Alif Ma'luf Bio Visual"
-            format="webp"
-            loading="lazy"
+            format="gif"
+            loading="eager"
+            fetchpriority="high"
           />
         </div>
 
@@ -50,14 +48,14 @@
       <div class="relative group/slider min-h-[300px] md:px-12 w-full">
         <client-only>
           <Carousel
-            :autoplay="50"
+            :autoplay="autoplayPaused ? 0 : 50"
             :transition="carouselDuration"
             transition-easing="linear"
             wrap-around
             :items-to-show="windowWidth < 768 ? 1.1 : 'auto'"
             snap-align="center"
-            :mouse-drag="false"
-            :touch-drag="false"
+            :mouse-drag="true"
+            :touch-drag="true"
             pause-autoplay-on-hover
             class="draggable-marquee results-carousel w-full overflow-visible"
             :class="{ 'is-paused': autoplayPaused }"
@@ -96,17 +94,39 @@
         </p>
 
         <client-only>
-          <Vue3Marquee :duration="windowWidth < 768 ? 15 : 40" pause-on-hover>
-            <div v-for="(logo, i) in firstRow" :key="i" class="client-logo px-5">
-              <NuxtImg :src="logo" class="w-16 h-12 md:w-32 md:h-16 object-contain" format="webp" />
-            </div>
-          </Vue3Marquee>
+          <div class="flex flex-col gap-4">
+            <Vue3Marquee :duration="windowWidth < 768 ? 20 : 40" pause-on-hover>
+              <div
+                v-for="(logo, i) in firstRow"
+                :key="i"
+                class="flex items-center justify-center px-4 md:px-8 h-12 md:h-20 w-28 md:w-48 shrink-0 transition-all duration-300"
+              >
+                <NuxtImg
+                  :src="logo"
+                  class="max-h-full max-w-full object-contain transition-all duration-500"
+                  :class="getLogoWidthClass(logo)"
+                  format="webp"
+                  loading="lazy"
+                />
+              </div>
+            </Vue3Marquee>
 
-          <Vue3Marquee :duration="windowWidth < 768 ? 15 : 40" direction="reverse" pause-on-hover>
-            <div v-for="(logo, i) in secondRow" :key="i" class="client-logo px-5">
-              <NuxtImg :src="logo" class="w-16 h-12 md:w-32 md:h-16 object-contain" format="webp" />
-            </div>
-          </Vue3Marquee>
+            <Vue3Marquee :duration="windowWidth < 768 ? 20 : 40" direction="reverse" pause-on-hover>
+              <div
+                v-for="(logo, i) in secondRow"
+                :key="i"
+                class="flex items-center justify-center px-4 md:px-8 h-12 md:h-20 w-28 md:w-48 shrink-0 transition-all duration-300"
+              >
+                <NuxtImg
+                  :src="logo"
+                  class="max-h-full max-w-full object-contain transition-all duration-500"
+                  :class="getLogoWidthClass(logo)"
+                  format="webp"
+                  loading="lazy"
+                />
+              </div>
+            </Vue3Marquee>
+          </div>
         </client-only>
       </div>
     </div>
@@ -128,14 +148,8 @@ const autoplayPaused = computed(() => isHovered.value || !!currentlyPlayingId.va
 const windowWidth = ref(0);
 const carouselDuration = computed(() => (windowWidth.value < 768 ? 5000 : 4000));
 
-const stopImages = [
-  "https://cdn.qiblat.my.id/stop 1.png",
-  "https://cdn.qiblat.my.id/stop-2-new.png",
-];
-
-const activeFrame = ref(0);
-let stopInterval;
 let handleResize;
+let rafId;
 
 const videoListSrc = ref(videoList);
 const clientListSrc = ref(clientLogo);
@@ -143,52 +157,85 @@ const clientListSrc = ref(clientLogo);
 const firstRow = computed(() => clientListSrc.value.slice(0, 12));
 const secondRow = computed(() => clientListSrc.value.slice(12));
 
+const getLogoWidthClass = (logo) => {
+  if (logo === clientLogo[1]) return "w-24";
+  if (logo === clientLogo[9]) return "w-20";
+  if (logo === clientLogo[11]) return "w-60";
+  if (logo === clientLogo[12]) return "w-16";
+  if (logo === clientLogo[13]) return "w-24";
+  if (logo === clientLogo[16]) return "w-16";
+  if (logo === clientLogo[17]) return "w-20";
+  if (logo === clientLogo[15]) return "w-24";
+  if (logo === clientLogo[20]) return "w-20";
+  if (logo === clientLogo[21]) return "w-14";
+  if (logo === clientLogo[22]) return "w-16";
+  return "";
+};
+
+const debounce = (func, wait) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+};
+
 onMounted(() => {
   windowWidth.value = window.innerWidth;
 
-  handleResize = () => {
+  handleResize = debounce(() => {
     windowWidth.value = window.innerWidth;
+  }, 150);
+
+  window.addEventListener("resize", handleResize, { passive: true });
+
+  let lastTime = 0;
+  const animate = (currentTime) => {
+    if (currentTime - lastTime >= 500) {
+      lastTime = currentTime;
+    }
+    rafId = requestAnimationFrame(animate);
   };
 
-  window.addEventListener("resize", handleResize);
-
-  stopInterval = setInterval(() => {
-    activeFrame.value = activeFrame.value >= stopImages.length - 1 ? 0 : activeFrame.value + 1;
-  }, 400);
+  rafId = requestAnimationFrame(animate);
 });
 
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
-  clearInterval(stopInterval);
+  if (rafId) {
+    cancelAnimationFrame(rafId);
+  }
 });
 </script>
 
 <style scoped>
-.client-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* PAUSE WITHOUT GLITCH */
 :deep(.draggable-marquee.is-paused .carousel__track) {
-  animation-play-state: paused;
-  transition-duration: 0s !important;
+  transition: transform 0.8s ease-out !important;
 }
 
-/* SMOOTH GPU */
 :deep(.carousel__slide) {
   padding: 1rem 0.5rem;
   width: auto !important;
+  transform: translateZ(0);
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
 }
 
 :deep(.carousel__track) {
   align-items: stretch;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-/* NAV */
+:deep(.carousel__slide img),
+:deep(.carousel__slide video) {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 :deep(.carousel__prev),
 :deep(.carousel__next) {
   background-color: rgba(255, 255, 255, 0.2);
@@ -201,6 +248,13 @@ onUnmounted(() => {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  transition: all 0.2s ease;
+}
+
+:deep(.carousel__prev:hover),
+:deep(.carousel__next:hover) {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.05);
 }
 
 @media (max-width: 768px) {
@@ -209,5 +263,11 @@ onUnmounted(() => {
     width: 32px;
     height: 32px;
   }
+}
+
+:deep(.v3m-container) {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 </style>
