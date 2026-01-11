@@ -3,56 +3,67 @@ export const videoList = [
     title: "BPJS Ketenagakerjaan",
     url: "https://youtu.be/XV_NXxiwe_w",
     type: "landscape",
+    logo: "https://cdn.qiblat.my.id/logo-bpjstk.png",
   },
   {
     title: "PT IMPA MARINE PASIFIK",
     url: "https://youtube.com/shorts/Is2_SIZh3oY",
     type: "portrait",
+    logo: "https://cdn.qiblat.my.id/logo-impa.png",
   },
   {
     title: "Komerce",
     url: "https://youtu.be/L6OVdO0TsIM?si=1KjQSA32l3AGdjLM",
     type: "landscape",
+    logo: "https://cdn.qiblat.my.id/logo-komerce.png",
   },
   {
     title: "OMAGO Eyelash",
     url: "https://youtube.com/shorts/f0PE_eHOlVM",
     type: "portrait",
+    logo: "https://cdn.qiblat.my.id/logo-omago.png",
   },
   {
     title: "Telkomsel",
     url: "https://youtu.be/tPv4xUYb3ek",
     type: "landscape",
+    logo: "https://cdn.qiblat.my.id/logo-telkomsel.png",
   },
   {
     title: "DEOSRPAY Holigrels",
     url: "https://youtube.com/shorts/lFph8oYeBFo",
     type: "portrait",
+    logo: "https://cdn.qiblat.my.id/logo-holigrels.png",
   },
   {
     title: "Pusat Gadai Indonesia",
     url: "https://www.youtube.com/embed/v-v2R9nZEWY?si=xgtdJcXstqXJJ_fk",
     type: "landscape",
+    logo: "https://cdn.qiblat.my.id/logo-pgi.png",
   },
   {
     title: "Hyundai CRETA Alpha",
     url: "https://youtube.com/shorts/r3vpl8__ioU",
     type: "portrait",
+    logo: "https://cdn.qiblat.my.id/logo-hyundai.png",
   },
   {
-    title: "PT PP",
+    title: "PT PP Construction & Investment",
     url: "https://youtu.be/i1IY-jsHIrw",
     type: "landscape",
+    logo: "https://cdn.qiblat.my.id/logo-pp.png",
   },
   {
     title: "Fraghead Blue Trident",
     url: "https://cdn.qiblat.my.id/fraghead-video.mp4",
     type: "portrait",
+    logo: "https://cdn.qiblat.my.id/logo-fraghead.png",
   },
   {
     title: "CKB Logistic",
     url: "https://youtu.be/oSMsjvmrEYA",
     type: "landscape",
+    logo: "https://cdn.qiblat.my.id/logo-ckb.png",
   },
 ];
 

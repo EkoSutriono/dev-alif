@@ -65,14 +65,74 @@
             <Slide v-for="(video, index) in videoListSrc" :key="index">
               <div class="px-2">
                 <div
-                  class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 relative"
+                  class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 relative cursor-pointer group/item"
                   :class="
                     video.type === 'portrait'
                       ? 'h-[400px] md:h-[500px] aspect-9/16'
                       : 'w-[85vw] md:w-auto md:h-[500px] aspect-video'
                   "
+                  @click="openVideo(video)"
                 >
-                  <VideoPlayer :url="video.url" :orientation="video.type" />
+                  <NuxtImg
+                    v-if="getThumbnail(video.url)"
+                    :src="getThumbnail(video.url)"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110"
+                    loading="lazy"
+                    alt="Video Thumbnail"
+                  />
+                  <video
+                    v-else-if="isVideo(video.url)"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110"
+                    preload="metadata"
+                    muted
+                    playsinline
+                  >
+                    <source :src="video.url" type="video/mp4" />
+                  </video>
+                  <div
+                    v-else
+                    class="w-full h-full bg-linear-to-br from-gray-800 to-black flex items-center justify-center"
+                  >
+                    <svg
+                      class="w-12 h-12 text-white/20"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+
+                  <div class="absolute inset-0 flex items-center justify-center z-10">
+                    <div
+                      class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover/item:scale-110 group-hover/item:bg-white/30 transition-all duration-300 shadow-xl"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        class="w-8 h-8 md:w-10 md:h-10 text-white fill-current translate-x-0.5"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div
+                    class="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/90 to-transparent translate-y-2 group-hover/item:translate-y-0 opacity-100 transition-all duration-300 flex items-center gap-2"
+                  >
+                    <NuxtImg
+                      :src="video.logo"
+                      class="w-20 h-12 object-contain filter grayscale group-hover/item:grayscale-0"
+                      format="webp"
+                      loading="lazy"
+                    />
+                    <div class="w-px h-10 bg-white"></div>
+                    <p class="text-white text-sm font-medium truncate">{{ video.title }}</p>
+                  </div>
                 </div>
               </div>
             </Slide>
@@ -130,6 +190,60 @@
         </client-only>
       </div>
     </div>
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
+      >
+        <div
+          v-if="selectedVideo"
+          class="fixed inset-0 z-1000 flex items-center justify-center bg-black/95 md:p-10 p-4"
+          @click="closeVideo"
+        >
+          <div
+            class="relative w-full max-w-6xl shadow-2xl transition-all duration-500 overflow-hidden rounded-3xl bg-black border border-white/10"
+            :class="
+              selectedVideo.type === 'portrait'
+                ? 'max-h-[90vh] aspect-9/16 h-full w-auto'
+                : 'max-w-6xl aspect-video w-full'
+            "
+            @click.stop
+          >
+            <button
+              type="button"
+              class="absolute top-4 right-4 text-white/70 hover:text-white transition-all duration-300 z-1010 hover:scale-110 bg-black/40 backdrop-blur-md rounded-full p-2 border border-white/20"
+              @click="closeVideo"
+            >
+              <span class="sr-only">Close</span>
+              <svg
+                class="w-6 h-6 md:w-8 md:h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            <VideoPlayer
+              v-if="isAnimatingModalDone"
+              :url="selectedVideo.url"
+              :orientation="selectedVideo.type"
+            />
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </section>
 </template>
 
@@ -144,6 +258,50 @@ const { currentlyPlayingId } = useVideoManager();
 
 const isHovered = ref(false);
 const autoplayPaused = computed(() => isHovered.value || !!currentlyPlayingId.value);
+
+const selectedVideo = ref(null);
+const isAnimatingModalDone = ref(false);
+
+const openVideo = (video) => {
+  selectedVideo.value = video;
+  document.body.style.overflow = "hidden";
+  window.addEventListener("keydown", handleEsc);
+  setTimeout(() => {
+    isAnimatingModalDone.value = true;
+  }, 400);
+};
+
+const closeVideo = () => {
+  selectedVideo.value = null;
+  isAnimatingModalDone.value = false;
+  document.body.style.overflow = "auto";
+  window.removeEventListener("keydown", handleEsc);
+};
+
+const handleEsc = (e) => {
+  if (e.key === "Escape") closeVideo();
+};
+
+const getThumbnail = (url) => {
+  if (!url) return null;
+  const youtubeRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+  const match = url.match(youtubeRegExp);
+  if (match && match[2].length === 11) {
+    return `https://i.ytimg.com/vi/${match[2]}/hqdefault.jpg`;
+  }
+  return null;
+};
+
+const isVideo = (url) => {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return (
+    u.includes(".mp4") ||
+    u.includes("cdn.qiblat.my.id") ||
+    u.startsWith("/") ||
+    (u.startsWith("http") && !u.includes("youtube") && !u.includes("instagram"))
+  );
+};
 
 const windowWidth = ref(0);
 const carouselDuration = computed(() => (windowWidth.value < 768 ? 5000 : 4000));
