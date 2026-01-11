@@ -19,7 +19,3 @@ import AboutBio from "./about/AboutBio.vue";
 import AboutVideoResults from "./about/AboutVideoResults.vue";
 import AboutClients from "./about/AboutClients.vue";
 </script>
-
-<style scoped>
-/* Main section styles if any */
-</style>

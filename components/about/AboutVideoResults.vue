@@ -115,7 +115,7 @@
             class="relative w-full max-w-6xl shadow-2xl transition-all duration-500 overflow-hidden rounded-3xl bg-black border border-white/10"
             :class="
               selectedVideo.type === 'portrait'
-                ? 'max-h-[70vh] aspect-9/16 h-full w-auto'
+                ? 'max-h-[55vh] aspect-9/16 h-full w-auto'
                 : 'max-w-6xl aspect-video w-full'
             "
             @click.stop
