@@ -42,6 +42,23 @@
             </div>
           </Vue3Marquee>
         </div>
+
+        <template #fallback>
+          <div class="flex flex-wrap justify-center gap-4 md:gap-8 py-4">
+            <div
+              v-for="(logo, i) in clientLogo.slice(0, 10)"
+              :key="i"
+              class="flex items-center justify-center h-12 md:h-20 w-28 md:w-48 shrink-0 border border-black/5 rounded-xl p-2 md:p-4"
+            >
+              <NuxtImg
+                :src="logo"
+                class="max-h-full max-w-full object-contain grayscale opacity-20"
+                format="webp"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </template>
       </client-only>
     </div>
   </div>

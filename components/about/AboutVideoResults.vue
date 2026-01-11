@@ -94,62 +94,86 @@
             <Navigation />
           </template>
         </Carousel>
+
+        <template #fallback>
+          <div class="flex overflow-x-hidden justify-center gap-4 py-8">
+            <div
+              v-for="(video, index) in videoList.slice(0, 3)"
+              :key="index"
+              class="rounded-2xl overflow-hidden bg-gray-900 border border-white/10 opacity-30 shrink-0"
+              :class="
+                video.type === 'portrait'
+                  ? 'h-[400px] md:h-[500px] aspect-9/16'
+                  : 'h-[400px] md:h-[500px] aspect-video'
+              "
+            >
+              <NuxtImg
+                v-if="video.thumbnail"
+                :src="video.thumbnail"
+                class="w-full h-full object-cover grayscale"
+                loading="eager"
+              />
+            </div>
+          </div>
+        </template>
       </client-only>
     </div>
 
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition duration-300 ease-out"
-        enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-95"
-      >
-        <div
-          v-if="selectedVideo"
-          class="fixed inset-0 z-1000 flex items-center justify-center bg-black/95 md:p-10 p-4"
-          @click="closeVideo"
+    <ClientOnly>
+      <Teleport to="body">
+        <Transition
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0 scale-95"
+          enter-to-class="opacity-100 scale-100"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100 scale-100"
+          leave-to-class="opacity-0 scale-95"
         >
           <div
-            class="relative w-full max-w-6xl shadow-2xl transition-all duration-500 overflow-hidden rounded-3xl bg-black border border-white/10"
-            :class="
-              selectedVideo.type === 'portrait'
-                ? 'max-h-[55vh] aspect-9/16 h-full w-auto'
-                : 'max-w-6xl aspect-video w-full'
-            "
-            @click.stop
+            v-if="selectedVideo"
+            class="fixed inset-0 z-1000 flex items-center justify-center bg-black/95 md:p-10 p-4"
+            @click="closeVideo"
           >
-            <button
-              type="button"
-              class="absolute top-4 right-4 text-white/70 hover:text-white transition-all duration-300 z-1010 hover:scale-110 bg-black/40 backdrop-blur-md rounded-full p-2 border border-white/20"
-              @click="closeVideo"
+            <div
+              class="relative w-full max-w-6xl shadow-2xl transition-all duration-500 overflow-hidden rounded-3xl bg-black border border-white/10"
+              :class="
+                selectedVideo.type === 'portrait'
+                  ? 'max-h-[55vh] aspect-9/16 h-full w-auto'
+                  : 'max-w-6xl aspect-video w-full'
+              "
+              @click.stop
             >
-              <span class="sr-only">Close</span>
-              <svg
-                class="w-6 h-6 md:w-8 md:h-8"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <button
+                type="button"
+                class="absolute top-4 right-4 text-white/70 hover:text-white transition-all duration-300 z-1010 hover:scale-110 bg-black/40 backdrop-blur-md rounded-full p-2 border border-white/20"
+                @click="closeVideo"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+                <span class="sr-only">Close</span>
+                <svg
+                  class="w-6 h-6 md:w-8 md:h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
 
-            <VideoPlayer
-              v-if="isAnimatingModalDone"
-              :url="selectedVideo.url"
-              :orientation="selectedVideo.type"
-            />
+              <VideoPlayer
+                v-if="isAnimatingModalDone"
+                :url="selectedVideo.url"
+                :orientation="selectedVideo.type"
+              />
+            </div>
           </div>
-        </div>
-      </Transition>
-    </Teleport>
+        </Transition>
+      </Teleport>
+    </ClientOnly>
   </div>
 </template>
 

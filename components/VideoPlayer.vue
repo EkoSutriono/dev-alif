@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted, computed, nextTick } from "vue";
+import { ref, onUnmounted, computed, nextTick, useId } from "vue";
 import { useVideoManager } from "~/composables/useVideoManager";
 
 const props = defineProps({
@@ -142,7 +142,7 @@ const props = defineProps({
 });
 
 const { registerPlayer, unregisterPlayer, onPlay, onStop } = useVideoManager();
-const playerId = `v-player-${Math.random().toString(36).substr(2, 9)}`;
+const playerId = useId();
 const player = ref(null);
 const isActive = ref(false);
 
