@@ -66,12 +66,12 @@
           <div class="absolute top-0 left-0 right-0 h-2 bg-[#947a23]"></div>
 
           <div class="p-8 border-b border-black/10 pt-10">
-            <div class="flex justify-between items-center mb-2">
+            <div class="flex flex-row xs:flex-col justify-between items-center mb-2">
               <h3 class="text-2xl font-black text-[#947a23] uppercase">Ultimate</h3>
               <span
-                class="px-3 py-1 bg-[#947a23] text-[10px] font-black uppercase text-white rounded-full text-center"
+                class="px-3 py-1 bg-[#947a23] text-[16px] font-black uppercase text-white rounded-full text-center"
               >
-                Paling Populer
+                Diskon 66%
               </span>
             </div>
             <p class="text-gray-500 text-sm">
@@ -82,7 +82,9 @@
           </div>
           <div class="p-8 grow">
             <div class="mb-8">
-              <span class="text-4xl font-black text-[#947a23]">Rp 456k</span>
+              <span class="text-2xl text-[#947a23] line-through">Rp 456k</span>
+              <br />
+              <span class="text-4xl font-black text-[#947a23]">Rp 156k</span>
               <span class="text-gray-400">/sekali bayar</span>
             </div>
             <ul class="space-y-4">
@@ -107,13 +109,14 @@
               </li>
             </ul>
           </div>
-          <div class="p-8 pt-0">
+          <div class="p-8 pt-0 flex flex-col gap-2">
             <button
               class="w-full h-14 rounded-2xl bg-[#947a23] text-white font-bold hover:bg-black transition-all active:scale-95 shadow-xl shadow-black/10"
               @click="handleClick('ultimate')"
             >
               Pilih Ultimate
             </button>
+            <span class="text-sm text-center text-red-500">Berakhir dalam {{ countdown }}</span>
           </div>
         </div>
       </div>
@@ -122,6 +125,8 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+
 const premiumFeatures = ["Materi 5 Bab inti", "25+ modul pembelajaran", "Akses selamanya"];
 
 const ultimateFeatures = [
@@ -133,6 +138,51 @@ const ultimateFeatures = [
   "Sharing session rutin",
   "Bedah project Alif Ma`luf",
 ];
+
+const countdown = ref("00:00:00:00");
+let timer = null;
+
+const updateCountdown = (endTime) => {
+  const now = new Date().getTime();
+  const distance = endTime - now;
+
+  if (distance < 0) {
+    countdown.value = "Offer Ended";
+    if (timer) clearInterval(timer);
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  countdown.value = `${days.toString().padStart(2, "0")}h : ${hours
+    .toString()
+    .padStart(2, "0")}m : ${minutes.toString().padStart(2, "0")}s : ${seconds
+    .toString()
+    .padStart(2, "0")}s`;
+};
+
+onMounted(() => {
+  const STORAGE_KEY = "ultimate_countdown_expiry";
+  let expiry = localStorage.getItem(STORAGE_KEY);
+
+  if (!expiry) {
+    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+    expiry = new Date().getTime() + sevenDaysInMs;
+    localStorage.setItem(STORAGE_KEY, expiry.toString());
+  } else {
+    expiry = parseInt(expiry);
+  }
+
+  updateCountdown(expiry);
+  timer = setInterval(() => updateCountdown(expiry), 1000);
+});
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer);
+});
 
 const handleClick = (plan) => {
   if (plan === "premium") {
