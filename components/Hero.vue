@@ -1,7 +1,7 @@
 <template>
   <section
-    v-animate.once
-    class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black pt-32 pb-40 md:pt-30 md:pb-48 fade-in-reveal"
+    data-aos="fade"
+    class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black pt-32 pb-40 md:pt-30 md:pb-48"
   >
     <div class="absolute inset-0 z-0 overflow-hidden">
       <client-only>
@@ -33,15 +33,17 @@
       </a>
 
       <h1
-        v-animate.once
-        class="mb-8 font-black leading-[1.1] tracking-tight text-white text-4xl md:text-6xl lg:text-8xl uppercase fade-up-reveal"
+        data-aos="fade-up"
+        data-aos-delay="200"
+        class="mb-8 font-black leading-[1.1] tracking-tight text-white text-4xl md:text-6xl lg:text-8xl uppercase"
       >
         Masterclass
       </h1>
 
       <span
-        v-animate.once
-        class="text-white font-black mb-4 flex items-center gap-4 text-[24px] md:text-[34px] lg:text-[38px] uppercase fade-up-reveal"
+        data-aos="fade-up"
+        data-aos-delay="400"
+        class="text-white font-black mb-4 flex items-center gap-4 text-[24px] md:text-[34px] lg:text-[38px] uppercase"
       >
         Produksi Video Iklan Profesional Pakai AI
       </span>

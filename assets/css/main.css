@@ -7,59 +7,12 @@
   body {
     @apply bg-black text-white antialiased;
     font-family: "Montserrat", sans-serif;
+    overflow-x: hidden;
+  }
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
   }
 }
 @layer utilities {
-  .fade-up-reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition:
-      opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: opacity, transform;
-  }
-
-  .fade-up-reveal.animate-in,
-  .animate-item.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .fade-up-reveal.animate-out,
-  .animate-item.animate-out {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-
-  .fade-in-reveal {
-    opacity: 0;
-    transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: opacity;
-  }
-
-  .fade-in-reveal.animate-in {
-    opacity: 1;
-  }
-
-  .scale-in-reveal {
-    opacity: 0;
-    transform: scale(0.92);
-    transition:
-      opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: opacity, transform;
-  }
-
-  .scale-in-reveal.animate-in {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .animate-item {
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
 }

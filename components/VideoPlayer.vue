@@ -46,11 +46,14 @@
           v-else-if="type === 'native'"
           :id="playerId"
           ref="player"
-          class="w-full h-full object-cover"
+          class="w-full h-full"
+          :class="[orientation === 'portrait' ? 'object-contain' : 'object-cover']"
           controls
           autoplay
           playsinline
           @play="onPlay(playerId)"
+          @pause="onStop(playerId)"
+          @ended="onStop(playerId)"
         >
           <source :src="url" type="video/mp4" />
         </video>
@@ -104,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted, computed, nextTick } from "vue";
+import { ref, onUnmounted, computed, nextTick, useId } from "vue";
 import { useVideoManager } from "~/composables/useVideoManager";
 
 const props = defineProps({
@@ -128,10 +131,18 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  thumbnail: {
+    type: String,
+    default: null,
+  },
+  orientation: {
+    type: String,
+    default: "landscape",
+  },
 });
 
-const { registerPlayer, unregisterPlayer, onPlay } = useVideoManager();
-const playerId = `v-player-${Math.random().toString(36).substr(2, 9)}`;
+const { registerPlayer, unregisterPlayer, onPlay, onStop } = useVideoManager();
+const playerId = useId();
 const player = ref(null);
 const isActive = ref(false);
 
@@ -158,7 +169,6 @@ const videoId = computed(() => {
   const url = props.url;
 
   if (type.value === "youtube") {
-    // Standard, Embed, Shorts, and youtu.be links
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
     const match = url.match(regExp);
     if (match && match[2].length === 11) return match[2];
@@ -173,6 +183,7 @@ const videoId = computed(() => {
 });
 
 const thumbnailUrl = computed(() => {
+  if (props.thumbnail) return props.thumbnail;
   if (type.value === "youtube" && videoId.value) {
     return `https://i.ytimg.com/vi/${videoId.value}/hqdefault.jpg`;
   }
@@ -241,11 +252,18 @@ const initYoutube = () => {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
 
+  let attempts = 0;
+  const maxAttempts = 50;
   const checkYT = setInterval(() => {
+    attempts++;
     if (window.YT && window.YT.Player) {
       clearInterval(checkYT);
       window.loadingYTAPI = false;
       createPlayer();
+    } else if (attempts >= maxAttempts) {
+      clearInterval(checkYT);
+      window.loadingYTAPI = false;
+      console.warn("YouTube API failed to load");
     }
   }, 100);
 };
@@ -272,18 +290,52 @@ const createPlayer = () => {
       onStateChange: (event) => {
         if (event.data === window.YT.PlayerState.PLAYING) {
           onPlay(playerId);
+        } else if (
+          event.data === window.YT.PlayerState.PAUSED ||
+          event.data === window.YT.PlayerState.ENDED
+        ) {
+          onStop(playerId);
         }
       },
     },
   });
 };
 
+const handleFullscreenChange = () => {
+  if (props.orientation !== "portrait") return;
+
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
+      window.screen.orientation.lock("portrait").catch((err) => {
+        console.warn("Screen orientation lock failed:", err);
+      });
+    }
+  } else {
+    if (window.screen && window.screen.orientation && window.screen.orientation.unlock) {
+      window.screen.orientation.unlock();
+    }
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+});
+
 onUnmounted(() => {
+  document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
   if (player.value) {
-    if (typeof player.value.destroy === "function") {
-      player.value.destroy();
+    try {
+      if (typeof player.value.destroy === "function") {
+        player.value.destroy();
+      }
+    } catch (e) {
+      console.error("Error destroying player:", e);
     }
     unregisterPlayer(playerId);
+    player.value = null;
   }
+  isActive.value = false;
 });
 </script>
