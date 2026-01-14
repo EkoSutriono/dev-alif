@@ -24,7 +24,7 @@ export default defineNuxtConfig({
         { name: "author", content: "Alif Ma'luf" },
         // Open Graph / Facebook
         { property: "og:type", content: "website" },
-        { property: "og:url", content: "https://masterclass.alifmaluf.com/" },
+        { property: "og:url", content: "https://masterclassvideoiklanai.alifmaluf.id/" },
         { property: "og:title", content: "Masterclass AI - Alif Ma'luf" },
         {
           property: "og:description",
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
         { property: "og:image", content: "https://cdn.qiblat.my.id/Logo-only-Alif-Maluf.png" },
         // Twitter
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:url", content: "https://masterclass.alifmaluf.com/" },
+        { name: "twitter:url", content: "https://masterclassvideoiklanai.alifmaluf.id/" },
         { name: "twitter:title", content: "Masterclass AI - Alif Ma'luf" },
         {
           name: "twitter:description",
