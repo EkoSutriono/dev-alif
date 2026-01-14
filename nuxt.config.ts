@@ -53,6 +53,21 @@ export default defineNuxtConfig({
         { rel: "preconnect", href: "https://www.youtube.com" },
         { rel: "preconnect", href: "https://i.ytimg.com" },
       ],
+      script: [
+        {
+          src: "https://www.googletagmanager.com/gtag/js?id=G-62W2T3Z522",
+          async: true,
+        },
+        {
+          innerHTML: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-62W2T3Z522');
+          `,
+          type: "text/javascript",
+        },
+      ],
     },
   },
 
