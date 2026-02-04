@@ -125,7 +125,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 
 const premiumFeatures = ["Materi 5 Bab inti", "25+ modul pembelajaran", "Akses selamanya"];
 
@@ -139,17 +139,28 @@ const ultimateFeatures = [
   "Bedah project Alif Ma`luf",
 ];
 
-const countdown = ref("00:00:00:00");
-let timer = null;
+const STORAGE_KEY = "ultimate_countdown_expiry";
 
-const updateCountdown = (endTime) => {
+const getNewExpiry = () => {
+  const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+  return new Date().getTime() + sevenDaysInMs;
+};
+
+const updateCountdown = () => {
+  let expiry = parseInt(localStorage.getItem(STORAGE_KEY));
+  if (!expiry) {
+    expiry = getNewExpiry();
+    localStorage.setItem(STORAGE_KEY, expiry.toString());
+  }
+
   const now = new Date().getTime();
-  const distance = endTime - now;
+  let distance = expiry - now;
 
   if (distance < 0) {
-    countdown.value = "Offer Ended";
-    if (timer) clearInterval(timer);
-    return;
+    // Reset countdown for another 7 days
+    expiry = getNewExpiry();
+    localStorage.setItem(STORAGE_KEY, expiry.toString());
+    distance = expiry - now;
   }
 
   const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -165,19 +176,8 @@ const updateCountdown = (endTime) => {
 };
 
 onMounted(() => {
-  const STORAGE_KEY = "ultimate_countdown_expiry";
-  let expiry = localStorage.getItem(STORAGE_KEY);
-
-  if (!expiry) {
-    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
-    expiry = new Date().getTime() + sevenDaysInMs;
-    localStorage.setItem(STORAGE_KEY, expiry.toString());
-  } else {
-    expiry = parseInt(expiry);
-  }
-
-  updateCountdown(expiry);
-  timer = setInterval(() => updateCountdown(expiry), 1000);
+  updateCountdown();
+  timer = setInterval(updateCountdown, 1000);
 });
 
 onUnmounted(() => {
