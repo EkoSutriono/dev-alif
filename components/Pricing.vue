@@ -50,7 +50,7 @@
           </div>
           <div class="p-8 pt-0">
             <button
-            id="premium-button"
+              id="premium-button"
               class="w-full h-14 rounded-2xl border border-black bg-white text-black font-bold hover:bg-black hover:text-white transition-all active:scale-95"
               @click="handleClick('premium')"
             >
@@ -127,7 +127,10 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
+
+const countdown = ref("");
+let timer = null;
 
 const premiumFeatures = ["Materi 5 Bab inti", "25+ modul pembelajaran", "Akses selamanya"];
 
@@ -149,6 +152,8 @@ const getNewExpiry = () => {
 };
 
 const updateCountdown = () => {
+  if (!import.meta.client) return;
+
   let expiry = parseInt(localStorage.getItem(STORAGE_KEY));
   if (!expiry) {
     expiry = getNewExpiry();
