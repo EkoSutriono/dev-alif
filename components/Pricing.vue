@@ -50,6 +50,7 @@
           </div>
           <div class="p-8 pt-0">
             <button
+            id="premium-button"
               class="w-full h-14 rounded-2xl border border-black bg-white text-black font-bold hover:bg-black hover:text-white transition-all active:scale-95"
               @click="handleClick('premium')"
             >
@@ -111,6 +112,7 @@
           </div>
           <div class="p-8 pt-0 flex flex-col gap-2">
             <button
+              id="ultimate-button"
               class="w-full h-14 rounded-2xl bg-[#947a23] text-white font-bold hover:bg-black transition-all active:scale-95 shadow-xl shadow-black/10"
               @click="handleClick('ultimate')"
             >
