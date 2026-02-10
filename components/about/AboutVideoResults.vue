@@ -7,116 +7,153 @@
       Hasil Beberapa Video AI
     </h3>
 
-    <div class="relative group/slider min-h-[300px] md:px-12 w-full">
-      <client-only>
-        <Carousel
-          :autoplay="autoplayPaused ? 0 : 50"
-          :transition="carouselDuration"
-          transition-easing="linear"
-          wrap-around
-          :items-to-show="windowWidth < 768 ? 1.1 : 'auto'"
-          snap-align="center"
-          :mouse-drag="true"
-          :touch-drag="true"
-          pause-autoplay-on-hover
-          class="draggable-marquee results-carousel w-full overflow-visible"
-          :class="{ 'is-paused': autoplayPaused }"
-          @mouseenter="isHovered = true"
-          @mouseleave="isHovered = false"
-        >
-          <Slide v-for="(video, index) in videoList" :key="index">
-            <div class="px-2">
-              <div
-                class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 relative cursor-pointer group/item"
-                :class="
-                  video.type === 'portrait'
-                    ? 'h-[400px] md:h-[500px] aspect-9/16'
-                    : 'w-[85vw] md:w-auto md:h-[500px] aspect-video'
-                "
-                @click="openVideo(video)"
-              >
-                <NuxtImg
-                  v-if="video.thumbnail"
-                  :src="video.thumbnail"
-                  class="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110"
-                  loading="lazy"
-                  alt="Video Thumbnail"
-                />
-                <div
-                  v-else
-                  class="w-full h-full bg-linear-to-br from-gray-800 to-black flex items-center justify-center"
-                >
-                  <svg
-                    class="w-12 h-12 text-white/20"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1.5"
-                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
-
-                <div class="absolute inset-0 flex items-center justify-center z-10">
-                  <div
-                    class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover/item:scale-110 group-hover/item:bg-white/30 transition-all duration-300 shadow-xl"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      class="w-8 h-8 md:w-10 md:h-10 text-white fill-current translate-x-0.5"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                </div>
-
-                <div
-                  class="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/90 to-transparent translate-y-2 group-hover/item:translate-y-0 opacity-100 transition-all duration-300 flex items-center gap-2"
-                >
-                  <NuxtImg
-                    :src="video.logo"
-                    class="w-20 h-12 object-contain filter grayscale group-hover/item:grayscale-0"
-                    format="webp"
-                    loading="lazy"
-                  />
-                  <div class="w-px h-10 bg-white"></div>
-                  <p class="text-white text-sm font-medium truncate">{{ video.title }}</p>
-                </div>
-              </div>
-            </div>
-          </Slide>
-
-          <template #addons>
-            <Navigation />
-          </template>
-        </Carousel>
-
-        <template #fallback>
-          <div class="flex overflow-x-hidden justify-center gap-4 py-8">
+    <div class="relative group/slider min-h-[300px] md:px-12 w-full overflow-hidden">
+      <div
+        class="marquee-container results-carousel"
+        :class="{ 'is-paused': autoplayPaused }"
+        :style="{ '--duration': carouselDuration + 'ms' }"
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
+      >
+        <div class="marquee-content">
+          <!-- First set of videos -->
+          <div
+            v-for="(video, index) in videoList"
+            :key="'video-' + index"
+            class="marquee-item px-2"
+          >
             <div
-              v-for="(video, index) in videoList.slice(0, 3)"
-              :key="index"
-              class="rounded-2xl overflow-hidden bg-gray-900 border border-white/10 opacity-30 shrink-0"
+              class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 relative cursor-pointer group/item"
               :class="
                 video.type === 'portrait'
                   ? 'h-[400px] md:h-[500px] aspect-9/16'
-                  : 'h-[400px] md:h-[500px] aspect-video'
+                  : 'w-[85vw] md:w-auto md:h-[500px] aspect-video'
               "
+              @click="openVideo(video)"
             >
               <NuxtImg
                 v-if="video.thumbnail"
                 :src="video.thumbnail"
-                class="w-full h-full object-cover grayscale"
-                loading="eager"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110"
+                loading="lazy"
+                alt="Video Thumbnail"
               />
+              <div
+                v-else
+                class="w-full h-full bg-linear-to-br from-gray-800 to-black flex items-center justify-center"
+              >
+                <svg
+                  class="w-12 h-12 text-white/20"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+
+              <div class="absolute inset-0 flex items-center justify-center z-10">
+                <div
+                  class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover/item:scale-110 group-hover/item:bg-white/30 transition-all duration-300 shadow-xl"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    class="w-8 h-8 md:w-10 md:h-10 text-white fill-current translate-x-0.5"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+
+              <div
+                class="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/90 to-transparent translate-y-2 group-hover/item:translate-y-0 opacity-100 transition-all duration-300 flex items-center gap-2"
+              >
+                <NuxtImg
+                  :src="video.logo"
+                  class="w-20 h-12 object-contain filter grayscale group-hover/item:grayscale-0"
+                  format="webp"
+                  loading="lazy"
+                />
+                <div class="w-px h-10 bg-white"></div>
+                <p class="text-white text-sm font-medium truncate">{{ video.title }}</p>
+              </div>
             </div>
           </div>
-        </template>
-      </client-only>
+          <!-- Duplicated set for seamless loop -->
+          <div
+            v-for="(video, index) in videoList"
+            :key="'video-dup-' + index"
+            class="marquee-item px-2"
+          >
+            <div
+              class="rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10 relative cursor-pointer group/item"
+              :class="
+                video.type === 'portrait'
+                  ? 'h-[400px] md:h-[500px] aspect-9/16'
+                  : 'w-[85vw] md:w-auto md:h-[500px] aspect-video'
+              "
+              @click="openVideo(video)"
+            >
+              <NuxtImg
+                v-if="video.thumbnail"
+                :src="video.thumbnail"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110"
+                loading="lazy"
+                alt="Video Thumbnail"
+              />
+              <div
+                v-else
+                class="w-full h-full bg-linear-to-br from-gray-800 to-black flex items-center justify-center"
+              >
+                <svg
+                  class="w-12 h-12 text-white/20"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+
+              <div class="absolute inset-0 flex items-center justify-center z-10">
+                <div
+                  class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover/item:scale-110 group-hover/item:bg-white/30 transition-all duration-300 shadow-xl"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    class="w-8 h-8 md:w-10 md:h-10 text-white fill-current translate-x-0.5"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+
+              <div
+                class="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/90 to-transparent translate-y-2 group-hover/item:translate-y-0 opacity-100 transition-all duration-300 flex items-center gap-2"
+              >
+                <NuxtImg
+                  :src="video.logo"
+                  class="w-20 h-12 object-contain filter grayscale group-hover/item:grayscale-0"
+                  format="webp"
+                  loading="lazy"
+                />
+                <div class="w-px h-10 bg-white"></div>
+                <p class="text-white text-sm font-medium truncate">{{ video.title }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <ClientOnly>
@@ -179,7 +216,6 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { Carousel, Slide, Navigation } from "vue3-carousel";
 import { videoList } from "~/constant/assets";
 import { useVideoManager } from "~/composables/useVideoManager";
 
@@ -212,7 +248,7 @@ const handleEsc = (e) => {
 };
 
 const windowWidth = ref(0);
-const carouselDuration = computed(() => (windowWidth.value < 768 ? 5000 : 4000));
+const carouselDuration = computed(() => (windowWidth.value < 768 ? 30000 : 50000));
 
 let handleResize;
 
@@ -238,59 +274,42 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-:deep(.draggable-marquee.is-paused .carousel__track) {
-  transition: transform 0.8s ease-out !important;
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
 }
 
-:deep(.carousel__slide) {
-  padding: 1rem 0.5rem;
-  width: auto !important;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: transform;
+.marquee-content {
+  display: flex;
+  width: max-content;
+  animation: scroll var(--duration) linear infinite;
 }
 
-:deep(.carousel__track) {
-  align-items: stretch;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.is-paused .marquee-content {
+  animation-play-state: paused;
 }
 
-:deep(.carousel__slide img),
-:deep(.carousel__slide video) {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.marquee-item {
+  flex-shrink: 0;
 }
 
-:deep(.carousel__prev),
-:deep(.carousel__next) {
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  border-radius: 9999px;
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: all 0.2s ease;
-}
-
-:deep(.carousel__prev:hover),
-:deep(.carousel__next:hover) {
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-50%) scale(1.05);
-}
-
-@media (max-width: 768px) {
-  :deep(.carousel__prev),
-  :deep(.carousel__next) {
-    width: 32px;
-    height: 32px;
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
   }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.group\/slider {
+  padding-bottom: 2rem;
+}
+
+:deep(img),
+:deep(video) {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 </style>
