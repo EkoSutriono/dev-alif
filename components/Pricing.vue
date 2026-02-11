@@ -23,7 +23,7 @@
           </div>
           <div class="p-8 grow">
             <div class="mb-8">
-              <span class="text-4xl font-black text-black">Rp 86k</span>
+              <span class="text-4xl font-black text-black">Rp 156k</span>
               <span class="text-gray-400">/sekali bayar</span>
             </div>
             <ul class="space-y-4">
@@ -72,7 +72,7 @@
               <span
                 class="px-3 py-1 bg-[#947a23] text-[16px] font-black uppercase text-white rounded-full text-center"
               >
-                Diskon 66%
+                Diskon 44%
               </span>
             </div>
             <p class="text-gray-500 text-sm">
@@ -85,7 +85,7 @@
             <div class="mb-8">
               <span class="text-2xl text-[#947a23] line-through">Rp 456k</span>
               <br />
-              <span class="text-4xl font-black text-[#947a23]">Rp 156k</span>
+              <span class="text-4xl font-black text-[#947a23]">Rp 256k</span>
               <span class="text-gray-400">/sekali bayar</span>
             </div>
             <ul class="space-y-4">
