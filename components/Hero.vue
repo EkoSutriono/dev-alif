@@ -16,13 +16,19 @@
         </video>
       </client-only> -->
       <client-only>
-        <iframe
-          src="https://www.youtube.com/embed/d9aEvxAFB4E?autoplay=1&mute=1&loop=1&playlist=d9aEvxAFB4E&controls=0&showinfo=0&rel=0"
-          class="w-full h-full pointer-events-none blur-sm scale-150"
-          frameborder="0"
-          allow="autoplay; encrypted-media"
-          allowfullscreen
-        ></iframe>
+        <!-- Kontainer video rasio 16:9 yang mengikuti tinggi konten section -->
+        <div 
+          class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style="min-width: 150%; min-height: 150%; aspect-ratio: 16/9;"
+        >
+          <iframe
+            src="https://www.youtube.com/embed/d9aEvxAFB4E?autoplay=1&mute=1&loop=1&playlist=d9aEvxAFB4E&controls=0&showinfo=0&rel=0"
+            class="w-full h-full scale-[1.3] blur-sm opacity-80 pointer-events-none"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        </div>
       </client-only>
       <div class="absolute inset-0 bg-black/60 z-10"></div>
     </div>
