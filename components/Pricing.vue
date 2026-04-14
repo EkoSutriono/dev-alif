@@ -72,7 +72,7 @@
               <span
                 class="px-3 py-1 bg-[#947a23] text-[16px] font-black uppercase text-white rounded-full text-center"
               >
-                Diskon 44%
+                Diskon 40%
               </span>
             </div>
             <p class="text-gray-500 text-sm">
