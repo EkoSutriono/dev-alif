@@ -311,16 +311,6 @@ const syncTimeListener = (e) => {
   }
 };
 
-const syncMuteListener = (e) => {
-  if (ytIframe.value && ytIframe.value.contentWindow) {
-    const command = e.detail.isMuted ? "mute" : "unMute";
-    ytIframe.value.contentWindow.postMessage(
-      JSON.stringify({ event: "command", func: command, args: [] }),
-      "*"
-    );
-  }
-};
-
 onMounted(() => {
   updateCountdown();
   timer = setInterval(updateCountdown, 1000);
@@ -328,7 +318,6 @@ onMounted(() => {
   if (typeof window !== 'undefined') {
     window.addEventListener('message', messageListener);
     window.addEventListener('sync-video-time', syncTimeListener);
-    window.addEventListener('sync-mute-state', syncMuteListener);
     
     listenInterval = setInterval(() => {
       if (ytIframe.value && ytIframe.value.contentWindow) {
@@ -344,7 +333,6 @@ onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('message', messageListener);
     window.removeEventListener('sync-video-time', syncTimeListener);
-    window.removeEventListener('sync-mute-state', syncMuteListener);
   }
 });
 

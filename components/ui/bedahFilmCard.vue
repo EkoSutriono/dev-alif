@@ -158,10 +158,7 @@ const toggleMute = () => {
     );
     isMuted.value = !isMuted.value;
 
-    // Broadcast mute state for synchronization
-    window.dispatchEvent(
-      new CustomEvent("sync-mute-state", { detail: { isMuted: isMuted.value } })
-    );
+    // No longer broadcasting mute state because Pricing video should stay muted
   }
 };
 
