@@ -287,15 +287,17 @@ const updateCountdown = () => {
 };
 
 const messageListener = (event) => {
-  if (event.origin !== 'https://www.youtube.com') return;
+  if (event.origin !== "https://www.youtube.com") return;
   try {
     const data = JSON.parse(event.data);
-    if (data.event === 'infoDelivery' && data.info && data.info.currentTime !== undefined) {
+    if (data.event === "infoDelivery" && data.info && data.info.currentTime !== undefined) {
       if (ytIframe.value && event.source === ytIframe.value.contentWindow) {
         myTime = data.info.currentTime;
       }
     }
-  } catch(e){}
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const syncTimeListener = (e) => {
@@ -315,10 +317,10 @@ onMounted(() => {
   updateCountdown();
   timer = setInterval(updateCountdown, 1000);
 
-  if (typeof window !== 'undefined') {
-    window.addEventListener('message', messageListener);
-    window.addEventListener('sync-video-time', syncTimeListener);
-    
+  if (typeof window !== "undefined") {
+    window.addEventListener("message", messageListener);
+    window.addEventListener("sync-video-time", syncTimeListener);
+
     listenInterval = setInterval(() => {
       if (ytIframe.value && ytIframe.value.contentWindow) {
         ytIframe.value.contentWindow.postMessage(JSON.stringify({ event: "listening" }), "*");
@@ -330,9 +332,9 @@ onMounted(() => {
 onUnmounted(() => {
   if (timer) clearInterval(timer);
   if (listenInterval) clearInterval(listenInterval);
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('message', messageListener);
-    window.removeEventListener('sync-video-time', syncTimeListener);
+  if (typeof window !== "undefined") {
+    window.removeEventListener("message", messageListener);
+    window.removeEventListener("sync-video-time", syncTimeListener);
   }
 });
 
@@ -348,7 +350,10 @@ const handleClick = (plan) => {
       "_blank"
     );
   } else if (plan === "live") {
-    window.open("https://alifmaluf.myr.id/pl/bedah-film-pakai-ai", "_blank");
+    window.open(
+      "https://alifmaluf.myr.id/pl/live-session-bedah-film-ai-heist-the-heist-85017",
+      "_blank"
+    );
   }
 };
 </script>
