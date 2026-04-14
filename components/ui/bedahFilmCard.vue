@@ -1,26 +1,68 @@
 <template>
   <div
-    class="z-10 bg-black/60 backdrop-blur-sm border border-white/20 text-white text-base md:text-2xl lg:text-4xl font-semibold px-3 py-1.5 rounded-full flex items-center gap-2 shadow-lg mb-5"
+    class="z-10 w-[calc(100%-2rem)] sm:w-auto justify-center bg-black/60 backdrop-blur-sm border border-white/20 text-white text-sm md:text-2xl lg:text-4xl flex-wrap text-center font-semibold px-4 py-2 rounded-3xl sm:rounded-full flex items-center gap-2 shadow-lg mb-5"
   >
-    <span class="w-7 h-7 rounded-full bg-red-500 animate-pulse"></span>
+    <span class="w-7 h-7 shrink-0 rounded-full bg-red-500 animate-pulse"></span>
     Live Session - Bedah Film AI - Batch 1
   </div>
   <div
-    class="relative lg:w-full max-w-7xl mx-auto rounded-[2.5rem] bg-white/85 backdrop-blur-xl p-6 md:p-8 flex flex-col gap-6 md:gap-8 border-4 animate-border-pulse"
+    class="relative w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] xl:w-full lg:max-w-7xl md:max-w-4xl max-w-2xl xs:max-w-xl mx-auto rounded-[2.5rem] bg-white/85 backdrop-blur-xl p-5 md:p-8 flex flex-col gap-6 md:gap-8 border-4 animate-border-pulse"
   >
     <div class="flex flex-col md:flex-row gap-6 md:gap-10">
       <!-- Left side: Video -->
       <div class="w-full md:w-[55%] shrink-0">
-        <div class="rounded-3xl overflow-hidden bg-black aspect-video relative shadow-lg">
+        <div class="rounded-3xl overflow-hidden bg-black aspect-video relative shadow-lg group">
           <client-only>
             <iframe
-              src="https://www.youtube.com/embed/d9aEvxAFB4E?autoplay=1&mute=1&loop=1&playlist=d9aEvxAFB4E&controls=0&showinfo=0&rel=0"
+              ref="ytIframe"
+              src="https://www.youtube.com/embed/d9aEvxAFB4E?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=d9aEvxAFB4E&controls=0&showinfo=0&rel=0"
               class="w-full h-full pointer-events-none"
               frameborder="0"
               allow="autoplay; encrypted-media"
               allowfullscreen
             ></iframe>
           </client-only>
+
+          <!-- Toggle Mute Button -->
+          <button
+            class="absolute bottom-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2.5 rounded-full backdrop-blur-sm transition-all z-10"
+            aria-label="Toggle mute"
+            title="Toggle Mute"
+            @click="toggleMute"
+          >
+            <!-- Muted Icon -->
+            <svg
+              v-if="isMuted"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+            <!-- Unmuted Icon -->
+            <svg
+              v-else
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+          </button>
         </div>
         <div
           class="flex flex-col md:flex-row items-center gap-4 md:gap-6 justify-center md:justify-start flex-wrap text-center md:text-left mt-5"
@@ -78,9 +120,17 @@
           </ul>
         </div>
 
+        <!-- Desktop (md ke atas): arahkan ke #pricing -->
         <a
           href="#pricing"
-          class="w-full md:w-auto px-8 py-3.5 bg-[#e52020] text-white font-black text-base text-center rounded-2xl hover:bg-red-700 transition-all shadow-[0_8px_15px_-5px_rgba(229,32,32,0.8)] active:scale-95 shrink-0 mt-5 block"
+          class="hidden md:block w-full md:w-auto px-8 py-3.5 bg-[#e52020] text-white font-black text-base text-center rounded-2xl hover:bg-red-700 transition-all shadow-[0_8px_15px_-5px_rgba(229,32,32,0.8)] active:scale-95 shrink-0 mt-5"
+        >
+          Booking sekarang!
+        </a>
+        <!-- Mobile (di bawah md): arahkan ke #live -->
+        <a
+          href="#live"
+          class="block md:hidden w-full md:w-auto px-8 py-3.5 bg-[#e52020] text-white font-black text-base text-center rounded-2xl hover:bg-red-700 transition-all shadow-[0_8px_15px_-5px_rgba(229,32,32,0.8)] active:scale-95 shrink-0 mt-5"
         >
           Booking sekarang!
         </a>
@@ -90,9 +140,64 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+
 const learned = ["Filmmaking & Story", "Visual Thinking", "AI Production System", "Editing video"];
 
 const obtained = ["Recording webinar", "Grup diskusi"];
+
+const ytIframe = ref(null);
+const isMuted = ref(true);
+
+const toggleMute = () => {
+  if (ytIframe.value) {
+    const command = isMuted.value ? "unMute" : "mute";
+    ytIframe.value.contentWindow.postMessage(
+      JSON.stringify({ event: "command", func: command, args: [] }),
+      "*"
+    );
+    isMuted.value = !isMuted.value;
+
+    // Broadcast mute state for synchronization
+    window.dispatchEvent(
+      new CustomEvent("sync-mute-state", { detail: { isMuted: isMuted.value } })
+    );
+  }
+};
+
+const messageListener = (event) => {
+  if (event.origin !== "https://www.youtube.com") return;
+  try {
+    const data = JSON.parse(event.data);
+    if (data.event === "infoDelivery" && data.info && data.info.currentTime !== undefined) {
+      if (ytIframe.value && event.source === ytIframe.value.contentWindow) {
+        window.dispatchEvent(new CustomEvent("sync-video-time", { detail: data.info.currentTime }));
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+let listenInterval;
+
+onMounted(() => {
+  if (typeof window !== "undefined") {
+    window.addEventListener("message", messageListener);
+    listenInterval = setInterval(() => {
+      if (ytIframe.value && ytIframe.value.contentWindow) {
+        ytIframe.value.contentWindow.postMessage(JSON.stringify({ event: "listening" }), "*");
+      }
+    }, 1000);
+  }
+});
+
+onUnmounted(() => {
+  if (typeof window !== "undefined") {
+    window.removeEventListener("message", messageListener);
+  }
+  if (listenInterval) clearInterval(listenInterval);
+});
 </script>
 
 <style scoped>

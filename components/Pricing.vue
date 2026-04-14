@@ -128,6 +128,7 @@
         </div>
 
         <div
+          id="live"
           data-aos="fade-up"
           data-aos-delay="200"
           class="w-full md:w-1/2 bg-white rounded-[2.5rem] border border-black/10 overflow-hidden flex flex-col group hover:border-black/30 transition-all duration-500 hover:shadow-2xl hover:shadow-black/5"
@@ -143,7 +144,8 @@
             </div>
             <client-only>
               <iframe
-                src="https://www.youtube.com/embed/d9aEvxAFB4E?autoplay=1&mute=1&loop=1&playlist=d9aEvxAFB4E&controls=0&showinfo=0&rel=0"
+                ref="ytIframe"
+                src="https://www.youtube.com/embed/d9aEvxAFB4E?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=d9aEvxAFB4E&controls=0&showinfo=0&rel=0"
                 class="w-full h-full pointer-events-none"
                 frameborder="0"
                 allow="autoplay; encrypted-media"
@@ -209,7 +211,7 @@
               class="w-full h-14 rounded-2xl border border-black bg-white text-black font-bold hover:bg-black hover:text-white transition-all active:scale-95"
               @click="handleClick('live')"
             >
-              Pilih Bedah Film
+              Booking Sekarang!
             </button>
           </div>
         </div>
@@ -223,6 +225,9 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const countdown = ref("");
 let timer = null;
+const ytIframe = ref(null);
+let myTime = 0;
+let listenInterval = null;
 
 const premiumFeatures = ["Materi 5 Bab inti", "25+ modul pembelajaran", "Akses selamanya"];
 const liveObject = [
@@ -231,7 +236,7 @@ const liveObject = [
   "AI Production System",
   "Editing Video",
 ];
-const liveGot = ["Recording Webinar", "Group Diskusi"];
+const liveGot = ["Recording Webinar", "Grup Diskusi"];
 
 const ultimateFeatures = [
   "Materi 5 Bab inti",
@@ -281,13 +286,66 @@ const updateCountdown = () => {
     .padStart(2, "0")}s`;
 };
 
+const messageListener = (event) => {
+  if (event.origin !== 'https://www.youtube.com') return;
+  try {
+    const data = JSON.parse(event.data);
+    if (data.event === 'infoDelivery' && data.info && data.info.currentTime !== undefined) {
+      if (ytIframe.value && event.source === ytIframe.value.contentWindow) {
+        myTime = data.info.currentTime;
+      }
+    }
+  } catch(e){}
+};
+
+const syncTimeListener = (e) => {
+  const masterTime = e.detail;
+  if (Math.abs(myTime - masterTime) > 0.5) {
+    if (ytIframe.value && ytIframe.value.contentWindow) {
+      ytIframe.value.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "seekTo", args: [masterTime, true] }),
+        "*"
+      );
+      myTime = masterTime; // Prevent jitter
+    }
+  }
+};
+
+const syncMuteListener = (e) => {
+  if (ytIframe.value && ytIframe.value.contentWindow) {
+    const command = e.detail.isMuted ? "mute" : "unMute";
+    ytIframe.value.contentWindow.postMessage(
+      JSON.stringify({ event: "command", func: command, args: [] }),
+      "*"
+    );
+  }
+};
+
 onMounted(() => {
   updateCountdown();
   timer = setInterval(updateCountdown, 1000);
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('message', messageListener);
+    window.addEventListener('sync-video-time', syncTimeListener);
+    window.addEventListener('sync-mute-state', syncMuteListener);
+    
+    listenInterval = setInterval(() => {
+      if (ytIframe.value && ytIframe.value.contentWindow) {
+        ytIframe.value.contentWindow.postMessage(JSON.stringify({ event: "listening" }), "*");
+      }
+    }, 1000);
+  }
 });
 
 onUnmounted(() => {
   if (timer) clearInterval(timer);
+  if (listenInterval) clearInterval(listenInterval);
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('message', messageListener);
+    window.removeEventListener('sync-video-time', syncTimeListener);
+    window.removeEventListener('sync-mute-state', syncMuteListener);
+  }
 });
 
 const handleClick = (plan) => {
