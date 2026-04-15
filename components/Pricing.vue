@@ -236,7 +236,7 @@ const liveObject = [
   "AI Production System",
   "Editing Video",
 ];
-const liveGot = ["Recording Webinar", "Grup Diskusi"];
+const liveGot = ["Penjelasan materi (live)", "Recording Webinar", "Grup Diskusi"];
 
 const ultimateFeatures = [
   "Materi 5 Bab inti",
@@ -245,6 +245,7 @@ const ultimateFeatures = [
   "Grup komunitas",
   "Update materi & teknik baru",
   "Sharing session rutin",
+  "Bedah project iklan Alif Ma’uf",
   "Live Session - Bedah Film AI Batch 1 (2 Mei 2026)",
 ];
 
