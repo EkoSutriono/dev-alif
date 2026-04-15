@@ -144,7 +144,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const learned = ["Filmmaking & Story", "Visual Thinking", "AI Production System", "Editing video"];
 
-const obtained = ["Recording webinar", "Grup diskusi"];
+const obtained = ["Penjelasan materi (live)", "Recording webinar", "Grup diskusi"];
 
 const ytIframe = ref(null);
 const isMuted = ref(true);
