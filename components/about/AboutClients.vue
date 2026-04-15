@@ -8,14 +8,14 @@
         Klien yang telah bekerja sama
       </p>
 
-      <client-only>
-        <div class="flex flex-col gap-4">
-          <Vue3Marquee :duration="windowWidth < 768 ? 20 : 40" pause-on-hover>
-            <div
-              v-for="(logo, i) in firstRow"
-              :key="i"
-              class="flex items-center justify-center px-4 md:px-8 h-12 md:h-20 w-28 md:w-48 shrink-0 transition-all duration-300"
-            >
+      <div class="marquee-wrapper flex flex-col gap-4">
+        <!-- First Row -->
+        <div
+          class="marquee-container"
+          :style="{ '--duration': (windowWidth < 768 ? 20 : 40) + 's' }"
+        >
+          <div class="marquee-content marquee-right">
+            <div v-for="(logo, i) in firstRow" :key="'row1-' + i" class="marquee-item">
               <NuxtImg
                 :src="logo"
                 class="max-h-full max-w-full object-contain transition-all duration-500"
@@ -24,49 +24,53 @@
                 loading="lazy"
               />
             </div>
-          </Vue3Marquee>
-
-          <Vue3Marquee :duration="windowWidth < 768 ? 20 : 40" direction="reverse" pause-on-hover>
-            <div
-              v-for="(logo, i) in secondRow"
-              :key="i"
-              class="flex items-center justify-center px-4 md:px-8 h-12 md:h-20 w-28 md:w-48 shrink-0 transition-all duration-300"
-            >
+            <!-- Duplicate for seamless loop -->
+            <div v-for="(logo, i) in firstRow" :key="'row1-dup-' + i" class="marquee-item">
               <NuxtImg
                 :src="logo"
                 class="max-h-full max-w-full object-contain transition-all duration-500"
                 :class="getLogoWidthClass(logo)"
-                format="webp"
-                loading="lazy"
-              />
-            </div>
-          </Vue3Marquee>
-        </div>
-
-        <template #fallback>
-          <div class="flex flex-wrap justify-center gap-4 md:gap-8 py-4">
-            <div
-              v-for="(logo, i) in clientLogo.slice(0, 10)"
-              :key="i"
-              class="flex items-center justify-center h-12 md:h-20 w-28 md:w-48 shrink-0 border border-black/5 rounded-xl p-2 md:p-4"
-            >
-              <NuxtImg
-                :src="logo"
-                class="max-h-full max-w-full object-contain grayscale opacity-20"
                 format="webp"
                 loading="lazy"
               />
             </div>
           </div>
-        </template>
-      </client-only>
+        </div>
+
+        <!-- Second Row -->
+        <div
+          class="marquee-container"
+          :style="{ '--duration': (windowWidth < 768 ? 20 : 40) + 's' }"
+        >
+          <div class="marquee-content marquee-left">
+            <div v-for="(logo, i) in secondRow" :key="'row2-' + i" class="marquee-item">
+              <NuxtImg
+                :src="logo"
+                class="max-h-full max-w-full object-contain transition-all duration-500"
+                :class="getLogoWidthClass(logo)"
+                format="webp"
+                loading="lazy"
+              />
+            </div>
+            <!-- Duplicate for seamless loop -->
+            <div v-for="(logo, i) in secondRow" :key="'row2-dup-' + i" class="marquee-item">
+              <NuxtImg
+                :src="logo"
+                class="max-h-full max-w-full object-contain transition-all duration-500"
+                :class="getLogoWidthClass(logo)"
+                format="webp"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { Vue3Marquee } from "vue3-marquee";
 import { clientLogo } from "~/constant/assets";
 
 const clientListSrc = ref(clientLogo);
@@ -113,9 +117,66 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-:deep(.v3m-container) {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.marquee-content {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  animation: marquee var(--duration) linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  height: 3rem;
+  width: 7rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .marquee-item {
+    padding: 0 2rem;
+    height: 5rem;
+    width: 12rem;
+  }
+}
+
+.marquee-right {
+  animation-name: scroll-right;
+}
+
+.marquee-left {
+  animation-name: scroll-left;
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 </style>

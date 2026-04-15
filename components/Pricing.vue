@@ -7,7 +7,7 @@
     <div class="container mx-auto px-4 relative z-10">
       <h2 class="text-3xl md:text-5xl font-black text-center md:mb-24 mb-8 uppercase">Pricing</h2>
 
-      <div class="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-7xl mx-auto">
         <div
           data-aos="fade-up"
           data-aos-delay="200"
@@ -23,7 +23,7 @@
           </div>
           <div class="p-8 grow">
             <div class="mb-8">
-              <span class="text-4xl font-black text-black">Rp 86k</span>
+              <span class="text-4xl font-black text-black">Rp 156k</span>
               <span class="text-gray-400">/sekali bayar</span>
             </div>
             <ul class="space-y-4">
@@ -72,7 +72,7 @@
               <span
                 class="px-3 py-1 bg-[#947a23] text-[16px] font-black uppercase text-white rounded-full text-center"
               >
-                Diskon 66%
+                Diskon 40%
               </span>
             </div>
             <p class="text-gray-500 text-sm">
@@ -83,20 +83,25 @@
           </div>
           <div class="p-8 grow">
             <div class="mb-8">
-              <span class="text-2xl text-[#947a23] line-through">Rp 456k</span>
+              <span class="text-2xl text-[#947a23] line-through">Rp 756k</span>
               <br />
-              <span class="text-4xl font-black text-[#947a23]">Rp 156k</span>
+              <span class="text-4xl font-black text-[#947a23]">Rp 456k</span>
               <span class="text-gray-400">/sekali bayar</span>
             </div>
             <ul class="space-y-4">
               <li
-                v-for="feature in ultimateFeatures"
+                v-for="(feature, index) in ultimateFeatures"
                 :key="feature"
-                class="flex items-center gap-3 text-[#947a23]"
+                :class="[
+                  'flex items-center gap-3',
+                  index === ultimateFeatures.length - 1
+                    ? 'text-red-600 font-semibold'
+                    : 'text-[#947a23]',
+                ]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5 text-[#947a23]"
+                  class="h-5 w-5 shrink-0"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -121,6 +126,95 @@
             <span class="text-sm text-center text-red-500">Berakhir dalam {{ countdown }}</span>
           </div>
         </div>
+
+        <div
+          id="live"
+          data-aos="fade-up"
+          data-aos-delay="200"
+          class="w-full md:w-1/2 bg-white rounded-[2.5rem] border border-black/10 overflow-hidden flex flex-col group hover:border-black/30 transition-all duration-500 hover:shadow-2xl hover:shadow-black/5"
+        >
+          <div
+            class="aspect-video rounded-3xl bg-black border border-white/10 overflow-hidden relative"
+          >
+            <div
+              class="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-sm border border-white/20 text-white text-xs md:text-sm font-semibold px-3 py-1.5 rounded-full flex items-center gap-2 shadow-lg"
+            >
+              <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+              Live session - bedah Film AI Batch 1
+            </div>
+            <client-only>
+              <iframe
+                ref="ytIframe"
+                src="https://www.youtube.com/embed/d9aEvxAFB4E?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=d9aEvxAFB4E&controls=0&showinfo=0&rel=0"
+                class="w-full h-full pointer-events-none"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+              ></iframe>
+            </client-only>
+          </div>
+          <div class="p-8 grow">
+            <div class="mb-8">
+              <span class="text-4xl font-black text-black">Rp 86k</span>
+              <span class="text-gray-400">/sekali bayar</span>
+            </div>
+            <span class="text-black font-bold">Yang akan dipelajari:</span>
+            <ul class="space-y-4 mt-2">
+              <li
+                v-for="feature in liveObject"
+                :key="feature"
+                class="flex items-center gap-3 text-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 text-black"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                {{ feature }}
+              </li>
+            </ul>
+            <div class="mt-5">
+              <span class="text-black font-bold">Yang akan didapatkan:</span>
+            </div>
+            <ul class="space-y-4 mt-2">
+              <li
+                v-for="feature in liveGot"
+                :key="feature"
+                class="flex items-center gap-3 text-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 text-black"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                {{ feature }}
+              </li>
+            </ul>
+          </div>
+          <div class="p-8 pt-0">
+            <button
+              id="premium-button"
+              class="w-full h-14 rounded-2xl border border-black bg-white text-black font-bold hover:bg-black hover:text-white transition-all active:scale-95"
+              @click="handleClick('live')"
+            >
+              Booking Sekarang!
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -131,8 +225,18 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const countdown = ref("");
 let timer = null;
+const ytIframe = ref(null);
+let myTime = 0;
+let listenInterval = null;
 
 const premiumFeatures = ["Materi 5 Bab inti", "25+ modul pembelajaran", "Akses selamanya"];
+const liveObject = [
+  "Filmmaking & Story",
+  "Visual Thinking",
+  "AI Production System",
+  "Editing Video",
+];
+const liveGot = ["Recording Webinar", "Grup Diskusi"];
 
 const ultimateFeatures = [
   "Materi 5 Bab inti",
@@ -141,7 +245,7 @@ const ultimateFeatures = [
   "Grup komunitas",
   "Update materi & teknik baru",
   "Sharing session rutin",
-  "Bedah project Alif Ma`luf",
+  "Live Session - Bedah Film AI Batch 1 (2 Mei 2026)",
 ];
 
 const STORAGE_KEY = "ultimate_countdown_expiry";
@@ -182,13 +286,56 @@ const updateCountdown = () => {
     .padStart(2, "0")}s`;
 };
 
+const messageListener = (event) => {
+  if (event.origin !== "https://www.youtube.com") return;
+  try {
+    const data = JSON.parse(event.data);
+    if (data.event === "infoDelivery" && data.info && data.info.currentTime !== undefined) {
+      if (ytIframe.value && event.source === ytIframe.value.contentWindow) {
+        myTime = data.info.currentTime;
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const syncTimeListener = (e) => {
+  const masterTime = e.detail;
+  if (Math.abs(myTime - masterTime) > 0.5) {
+    if (ytIframe.value && ytIframe.value.contentWindow) {
+      ytIframe.value.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "seekTo", args: [masterTime, true] }),
+        "*"
+      );
+      myTime = masterTime; // Prevent jitter
+    }
+  }
+};
+
 onMounted(() => {
   updateCountdown();
   timer = setInterval(updateCountdown, 1000);
+
+  if (typeof window !== "undefined") {
+    window.addEventListener("message", messageListener);
+    window.addEventListener("sync-video-time", syncTimeListener);
+
+    listenInterval = setInterval(() => {
+      if (ytIframe.value && ytIframe.value.contentWindow) {
+        ytIframe.value.contentWindow.postMessage(JSON.stringify({ event: "listening" }), "*");
+      }
+    }, 1000);
+  }
 });
 
 onUnmounted(() => {
   if (timer) clearInterval(timer);
+  if (listenInterval) clearInterval(listenInterval);
+  if (typeof window !== "undefined") {
+    window.removeEventListener("message", messageListener);
+    window.removeEventListener("sync-video-time", syncTimeListener);
+  }
 });
 
 const handleClick = (plan) => {
@@ -200,6 +347,11 @@ const handleClick = (plan) => {
   } else if (plan === "ultimate") {
     window.open(
       "https://alifmaluf.myr.id/pl/paket-ultimate-masterclass-produksi-video-profesional-pakai-ai-4iav",
+      "_blank"
+    );
+  } else if (plan === "live") {
+    window.open(
+      "https://alifmaluf.myr.id/pl/live-session-bedah-film-ai-heist-the-heist-85017",
       "_blank"
     );
   }
@@ -239,6 +391,7 @@ const handleClick = (plan) => {
   0% {
     background-position: 0% 50%;
   }
+
   100% {
     background-position: 300% 50%;
   }
