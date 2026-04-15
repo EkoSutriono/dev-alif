@@ -245,7 +245,7 @@ const ultimateFeatures = [
   "Grup komunitas",
   "Update materi & teknik baru",
   "Sharing session rutin",
-  "Bedah project iklan Alif Ma’uf",
+  "Bedah project iklan Alif Ma’luf",
   "Live Session - Bedah Film AI Batch 1 (2 Mei 2026)",
 ];
 
